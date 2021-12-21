@@ -1,52 +1,92 @@
+import Actor from "./actor.js";
+import { GLOBALS } from "./shellriderEngineGlobals.js";
+
 class ShellriderEngine {
-    canvas;
-    ctx;
-    mouse;
-    canvasSize;
-    scaleFactor;
-    gameLoop = function() {
-        console.log("gameLoop is not set");
-    }
+  actors;
+  lastTimestamp;
+  preUpdates = function () {};
+  postUpdates = function () {};
+  preRenders = function () {};
+  postRenders = function () {};
 
-    constructor(canvas, canvasSize = {width: 720, height: 1280}, virtualScreenSize = {width: 720, height: 1280}){
-        this.canvas = canvas;
-        this.ctx = canvas.getContext("2d");
-        this.canvasSize = canvasSize;
-        this.virtualScreenSize = virtualScreenSize;
-        this.scaleFactor = {x: this.canvasSize.width/this.virtualScreenSize.width, y: this.canvasSize.height/this.virtualScreenSize.height};
-        this.mouse = {
-            x: 0,
-            y: 0,
-        }
-    }
-    
-    updateCanvasSize(){
-        this.canvas.setAttribute("width", this.canvasSize.width);
-        this.canvas.setAttribute("height", this.canvasSize.height);
-        this.scaleFactor = {x: this.canvasSize.width/this.virtualScreenSize.width, y: this.canvasSize.height/this.virtualScreenSize.height};
-    }
-    
-    engineLoop(){
-        this.updateCanvasSize();
-        this.gameLoop();
-        requestAnimationFrame(() => {this.engineLoop()});
-    }
-    
-    initMouse(){
-        document.onmousemove = (event) => {
-            const canvasBounds = this.canvas.getBoundingClientRect();
-            this.mouse.x = event.clientX - canvasBounds.left;
-            this.mouse.y = event.clientY - canvasBounds.top;
-        }
-    }
+  constructor(
+    canvas,
+    canvasSize = { width: 720, height: 1280 },
+    virtualScreenSize = { width: 720, height: 1280 }
+  ) {
+    GLOBALS.canvas = canvas;
+    GLOBALS.ctx = canvas.getContext("2d");
+    GLOBALS.canvasSize = canvasSize;
+    GLOBALS.virtualScreenSize = virtualScreenSize;
+    GLOBALS.scaleFactor = {
+      x: GLOBALS.canvasSize.width / GLOBALS.virtualScreenSize.width,
+      y: GLOBALS.canvasSize.height / GLOBALS.virtualScreenSize.height,
+    };
+    GLOBALS.mouse = {
+      x: 0,
+      y: 0,
+    };
+    this.actors = [];
+  }
 
-    init(){
-        this.initMouse();
-    }
+  addActor(actor) {
+    actor instanceof Actor ? this.actors.push(actor) : console.error(`${actor} is not of type 'Actor'`);
+  }
 
-    run(){
-        window.requestAnimationFrame(() => {this.engineLoop()});
-    }
+  removeActor(actor){
+      if(this.actors.includes(actor)){
+          this.actors.slice(this.actors.indexOf(actor),1);
+      }
+  }
+
+  updateCanvasSize() {
+    GLOBALS.canvas.setAttribute("width", GLOBALS.canvasSize.width);
+    GLOBALS.canvas.setAttribute("height", GLOBALS.canvasSize.height);
+    GLOBALS.scaleFactor = {
+      x: GLOBALS.canvasSize.width / GLOBALS.virtualScreenSize.width,
+      y: GLOBALS.canvasSize.height / GLOBALS.virtualScreenSize.height,
+    };
+  }
+
+  engineLoop() {
+    const delta = performance.now() - this.lastTimestamp;
+    this.lastTimestamp = performance.now();
+    this.updateCanvasSize();
+    
+    this.preUpdates();
+    this.actors.forEach((actor) => {
+      actor.update(delta);
+    });
+    this.postUpdates();
+    this.preRenders();
+    this.actors.forEach((actor) => {
+      actor.render();
+    });
+    this.postRenders();
+
+    requestAnimationFrame(() => {
+      this.engineLoop();
+    });
+  }
+
+  initMouse() {
+    document.onmousemove = (event) => {
+      const canvasBounds = GLOBALS.canvas.getBoundingClientRect();
+      GLOBALS.mouse.x = event.clientX - canvasBounds.left;
+      GLOBALS.mouse.y = event.clientY - canvasBounds.top;
+    };
+  }
+
+  init() {
+    this.initMouse();
+  }
+
+  run() {
+    this.lastTimestamp = performance.now();
+    window.requestAnimationFrame(() => {
+      this.engineLoop();
+    });
+  }
 }
 
 export default ShellriderEngine;
