@@ -14,7 +14,7 @@ class ShellriderEngine {
     canvasSize = { width: 720, height: 1280 },
     virtualScreenSize = { width: 720, height: 1280 }
   ) {
-    if (canvas) { //if no canvas is given engine can run in canvasless mode -- used for unit tests
+    if (canvas) { //if no canvas is given engine can run in canvasless mode -- used for
       GLOBALS.canvas = canvas;
       GLOBALS.ctx = canvas.getContext("2d");
       GLOBALS.canvasSize = canvasSize;
