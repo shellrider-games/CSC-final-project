@@ -53,7 +53,7 @@ class ShellriderEngine {
   }
 
   engineLoop() {
-    const delta = performance.now() - this.lastTimestamp;
+    const delta = (performance.now() - this.lastTimestamp)/1000; //time passed in seconds
     this.lastTimestamp = performance.now();
     this.updateCanvasSize();
 
