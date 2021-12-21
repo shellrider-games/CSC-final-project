@@ -11,7 +11,7 @@ body {
 }
 
 .hexTile {
-  transform: rotateX(60deg) rotateZ(-30deg);
+  transform: rotateX(60deg) rotateZ(-45deg);
   position: absolute;
   top: 50vh;
   left: 50vw;
