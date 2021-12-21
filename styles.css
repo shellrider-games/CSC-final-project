@@ -1,50 +1,23 @@
 body {
   margin: 0;
-  border: 0;
-  background: rgb(40, 39, 61);
-  background: linear-gradient(
+  padding: 0;
+  min-height: 100vh;
+}
+
+#flexContainer{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-content: center;
+}
+
+#gameCanvas {
+    padding: 0;
+    margin: 0;
+    background: linear-gradient(
     0deg,
     rgba(78, 103, 148, 1) 0%,
     rgba(208, 102, 202, 1) 100%
   );
-  min-height: 100vh;
-}
-
-.hexTile {
-  transform: rotateX(60deg) rotateZ(-45deg);
-  position: absolute;
-  top: 50vh;
-  left: 50vw;
-}
-
-.tri {
-  width: 0;
-  height: 0;
-  border-right: 60px solid transparent;
-  border-top: 103.9px solid green;
-  border-left: 60px solid transparent;
-  transform-origin: 0 0;
-  position: absolute;
-}
-
-.tri:hover {
-  border-right: 60px solid transparent;
-  border-top: 103.9px solid red;
-  border-left: 60px solid transparent;
-}
-
-.hexTile > .tri:nth-child(2) {
-  transform: rotate(60deg);
-}
-.hexTile > .tri:nth-child(3) {
-  transform: rotate(120deg);
-}
-.hexTile > .tri:nth-child(4) {
-  transform: rotate(180deg);
-}
-.hexTile > .tri:nth-child(5) {
-  transform: rotate(240deg);
-}
-.hexTile > .tri:nth-child(6) {
-  transform: rotate(300deg);
 }
