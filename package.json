@@ -1,0 +1,34 @@
+{
+  "name": "csc-final-project",
+  "version": "1.0.0",
+  "description": "Final project for CSC course at FHSTP",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "jest": "^27.4.5"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.5",
+    "babel-jest": "^27.4.5"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shellrider-games/CSC-final-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shellrider-games/CSC-final-project/issues"
+  },
+  "homepage": "https://github.com/shellrider-games/CSC-final-project#readme"
+}

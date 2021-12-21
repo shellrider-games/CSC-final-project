@@ -14,29 +14,33 @@ class ShellriderEngine {
     canvasSize = { width: 720, height: 1280 },
     virtualScreenSize = { width: 720, height: 1280 }
   ) {
-    GLOBALS.canvas = canvas;
-    GLOBALS.ctx = canvas.getContext("2d");
-    GLOBALS.canvasSize = canvasSize;
-    GLOBALS.virtualScreenSize = virtualScreenSize;
-    GLOBALS.scaleFactor = {
-      x: GLOBALS.canvasSize.width / GLOBALS.virtualScreenSize.width,
-      y: GLOBALS.canvasSize.height / GLOBALS.virtualScreenSize.height,
-    };
-    GLOBALS.mouse = {
-      x: 0,
-      y: 0,
-    };
+    if (canvas) {
+      GLOBALS.canvas = canvas;
+      GLOBALS.ctx = canvas.getContext("2d");
+      GLOBALS.canvasSize = canvasSize;
+      GLOBALS.virtualScreenSize = virtualScreenSize;
+      GLOBALS.scaleFactor = {
+        x: GLOBALS.canvasSize.width / GLOBALS.virtualScreenSize.width,
+        y: GLOBALS.canvasSize.height / GLOBALS.virtualScreenSize.height,
+      };
+      GLOBALS.mouse = {
+        x: 0,
+        y: 0,
+      };
+    }
     this.actors = [];
   }
 
   addActor(actor) {
-    actor instanceof Actor ? this.actors.push(actor) : console.error(`${actor} is not of type 'Actor'`);
+    actor instanceof Actor
+      ? this.actors.push(actor)
+      : console.error(`${actor} is not of type 'Actor'`);
   }
 
-  removeActor(actor){
-      if(this.actors.includes(actor)){
-          this.actors.slice(this.actors.indexOf(actor),1);
-      }
+  removeActor(actor) {
+    if (this.actors.includes(actor)) {
+      this.actors.slice(this.actors.indexOf(actor), 1);
+    }
   }
 
   updateCanvasSize() {
@@ -52,7 +56,7 @@ class ShellriderEngine {
     const delta = performance.now() - this.lastTimestamp;
     this.lastTimestamp = performance.now();
     this.updateCanvasSize();
-    
+
     this.preUpdates();
     this.actors.forEach((actor) => {
       actor.update(delta);

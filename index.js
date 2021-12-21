@@ -11,5 +11,4 @@ engine.preUpdates = () => {
     GLOBALS.canvasSize.height = Math.min(window.innerWidth/9*16,window.innerHeight) 
     GLOBALS.canvasSize.width = Math.min(window.innerHeight/16*9,window.innerWidth);
 }
-
 engine.run();
