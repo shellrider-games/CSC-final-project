@@ -1,13 +1,12 @@
 import ShellriderEngine from "./shellriderEngine.js";
 
 const canvas = document.querySelector("#gameCanvas");
-const context = canvas.getContext("2d");
-
 const engine = new ShellriderEngine(canvas);
 
 engine.gameLoop = () => {
-    engine.canvasSize.width = window.innerWidth;
-    engine.canvasSize.height = window.innerHeight;
+    engine.canvasSize.height = Math.min(window.innerWidth/9*16,window.innerHeight) 
+    engine.canvasSize.width = Math.min(window.innerHeight/16*9,window.innerWidth);
+    console.log(engine.mouse);
 }
 
 engine.init();
