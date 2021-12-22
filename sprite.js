@@ -22,8 +22,6 @@ class Sprite {
         if (typeof this.height !== "number") {
             this.height = this.image.naturalHeight;
         }
-        console.log("Resolve");
-        console.log(`width: ${this.width}, height: ${this.height}`);
         resolve();
       };
     });
