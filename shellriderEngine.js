@@ -76,8 +76,8 @@ class ShellriderEngine {
   initMouse() {
     document.onmousemove = (event) => {
       const canvasBounds = GLOBALS.canvas.getBoundingClientRect();
-      GLOBALS.mouse.x = event.clientX - canvasBounds.left;
-      GLOBALS.mouse.y = event.clientY - canvasBounds.top;
+      GLOBALS.mouse.x = (event.clientX - canvasBounds.left) / GLOBALS.scaleFactor.x;
+      GLOBALS.mouse.y = (event.clientY - canvasBounds.top) / GLOBALS.scaleFactor.y;
     };
   }
 
