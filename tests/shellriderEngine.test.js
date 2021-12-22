@@ -1,6 +1,7 @@
-import { expect, test } from '@jest/globals'
+import { expect, test } from '@jest/globals';
 import Actor from '../actor';
-import ShellriderEngine from '../shellriderEngine'
+import ShellriderEngine from '../shellriderEngine';
+import regeneratorRuntime from "regenerator-runtime";
 
 beforeAll(() => {
     jest.spyOn(global.console, 'error').mockImplementation(() => {});

@@ -1,5 +1,6 @@
 import Actor from "./actor.js";
 import { GLOBALS } from "./shellriderEngineGlobals.js";
+import Sprite from "./sprite.js";
 
 class ShellriderEngine {
   actors;
@@ -73,6 +74,7 @@ class ShellriderEngine {
     });
   }
 
+
   initMouse() {
     document.onmousemove = (event) => {
       const canvasBounds = GLOBALS.canvas.getBoundingClientRect();
@@ -91,6 +93,13 @@ class ShellriderEngine {
       this.engineLoop();
     });
   }
+
+  async requestSprite(filepath, width, height){
+    const sprite = new Sprite(filepath,width,height);
+    await sprite.loadImage();
+    return sprite;
+  }
+
 }
 
 export default ShellriderEngine;
