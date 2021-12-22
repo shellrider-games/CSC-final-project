@@ -4,16 +4,37 @@ import StaticBody from "./staticBody.js";
 
 
 window.onload = async () => {
+    
     const canvas = document.querySelector("#gameCanvas");
     const engine = new ShellriderEngine(canvas);
+    const fullSreenButton = document.querySelector("#fullscreen");
     
+
+    function canvasFullscreen() {
+        if(document.body.requestFullscreen){
+            document.body.requestFullscreen();
+        } else if (document.body.webkitRequestFullscreen) {
+            document.body.webkitRequestFullscreen();
+        }
+    }
+
+    document.body.addEventListener('fullscreenchange', (event) => {
+        if(document.fullscreenElement){
+            fullSreenButton.style.display = "none";
+        } else {
+            fullSreenButton.style.display = "block";
+        }
+    });
+
+    fullSreenButton.addEventListener("click", canvasFullscreen);
+
     engine.init();
     
     engine.preUpdates = () => {
         GLOBALS.canvasSize.height = Math.min(window.innerWidth/9*16,window.innerHeight) 
         GLOBALS.canvasSize.width = Math.min(window.innerHeight/16*9,window.innerWidth);
     }
-    const playerShip = new StaticBody(0,GLOBALS.virtualScreenSize.height-120,99,75);
+    const playerShip = new StaticBody(0,GLOBALS.virtualScreenSize.height-220,99,75);
     playerShip.sprite = await engine.requestSprite("./assets/img/playerShip1_red.png");
 
     playerShip.speed = 400;
@@ -32,7 +53,7 @@ Math.min(Math.max(GLOBALS.mouse.x-playerShip.dimensions.width/2,0),GLOBALS.virtu
     }
     
     
-    engine.addActor(playerShip);
+    engine.addActor(playerShip);    
     
     engine.run();
 }
