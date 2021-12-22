@@ -28,6 +28,11 @@ class ShellriderEngine {
         x: 0,
         y: 0,
       };
+      GLOBALS.touch = {
+        x:0,
+        y:0,
+        active: false,
+      }
     }
     this.actors = [];
   }
@@ -83,8 +88,22 @@ class ShellriderEngine {
     };
   }
 
+  initTouch() {
+    const updateTouchPosition = (event) => {
+      const touchList = event.changedTouches;
+      const canvasBounds = GLOBALS.canvas.getBoundingClientRect();
+      GLOBALS.touch.x = (touchList[0].clientX - canvasBounds.left) / GLOBALS.scaleFactor.x;
+      GLOBALS.touch.y = (touchList[0].clientX - canvasBounds.left) / GLOBALS.scaleFactor.x;
+      GLOBALS.touch.active = true;
+    }
+    document.ontouchstart = updateTouchPosition;
+    document.ontouchmove = updateTouchPosition;
+    document.ontouchend = (event) => {updateTouchPosition(event); GLOBALS.touch.active = false};
+  }
+
   init() {
     this.initMouse();
+    this.initTouch();
   }
 
   run() {

@@ -18,7 +18,15 @@ window.onload = async () => {
 
     playerShip.speed = 400;
     playerShip.update = (delta) => {
-        const goalX = Math.min(Math.max(GLOBALS.mouse.x-playerShip.dimensions.width/2,0),GLOBALS.virtualScreenSize.width - playerShip.dimensions.width);
+        let goalX;
+        if (GLOBALS.touch.active) {
+            goalX =  Math.min(Math.max(GLOBALS.touch.x-playerShip.dimensions.width/2,0),GLOBALS.virtualScreenSize.width - playerShip.dimensions.width);
+            GLOBALS.mouse.x = goalX;
+        } else {
+            goalX = Math.min(Math.max(GLOBALS.mouse.x-playerShip.dimensions.width/2,0),GLOBALS.virtualScreenSize.width - playerShip.dimensions.width);
+        }
+
+Math.min(Math.max(GLOBALS.mouse.x-playerShip.dimensions.width/2,0),GLOBALS.virtualScreenSize.width - playerShip.dimensions.width);
 
         goalX > playerShip.position.x ? playerShip.position.x = Math.min(playerShip.position.x + (playerShip.speed*delta),goalX) : playerShip.position.x = Math.max(playerShip.position.x - (playerShip.speed*delta),goalX);
     }
