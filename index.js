@@ -1,5 +1,6 @@
 import ShellriderEngine from "./shellriderEngine.js";
 import { GLOBALS } from "./shellriderEngineGlobals.js";
+import { randomNumberBetween } from "./toolBox.js";
 import StaticBody from "./staticBody.js";
 
 window.toggleDebug = function () {
@@ -32,6 +33,24 @@ window.onload = async () => {
 
   engine.init();
 
+  const asteroidSprite = await engine.requestSprite(
+    "./assets/img/meteorGrey_big1.png"
+  );
+
+  class Asteroid extends StaticBody {
+    constructor(x, y, width = 101, height = 84) {
+      super(x, y, width, height);
+      this.sprite = asteroidSprite;
+    }
+
+    update(delta) {
+      this.position.y += 300 * delta;
+      if (this.position.y >= GLOBALS.virtualScreenSize.height + 200) {
+        engine.removeActor(this);
+      }
+    }
+  }
+
   engine.preUpdates = () => {
     GLOBALS.canvasSize.height = Math.min(
       (window.innerWidth / 9) * 16,
@@ -42,6 +61,7 @@ window.onload = async () => {
       window.innerWidth
     );
   };
+
   const playerShip = new StaticBody(
     0,
     GLOBALS.virtualScreenSize.height - 220,
@@ -93,7 +113,17 @@ window.onload = async () => {
         ));
   };
 
-  engine.addActor(playerShip);
+  const asteroidGenerator = () => {
+    setTimeout(() => {
+      const asteroid = new Asteroid(
+        randomNumberBetween(0, GLOBALS.virtualScreenSize.width - 101),0
+      );
+      engine.addActor(asteroid);
+      asteroidGenerator();
+      }, randomNumberBetween(250,750));
+  };
 
+  asteroidGenerator();
+  engine.addActor(playerShip);
   engine.run();
 };

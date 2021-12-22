@@ -45,7 +45,7 @@ class ShellriderEngine {
 
   removeActor(actor) {
     if (this.actors.includes(actor)) {
-      this.actors.slice(this.actors.indexOf(actor), 1);
+      this.actors.splice(this.actors.indexOf(actor), 1);
     }
   }
 
