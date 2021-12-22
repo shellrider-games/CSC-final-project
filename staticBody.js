@@ -14,6 +14,8 @@ class StaticBody extends Actor {
   }
 
   render() {
+      let saveFillStyle = GLOBALS.ctx.fillStyle;
+      let saveStrokeStyle = GLOBALS.ctx.strokeStyle;
       GLOBALS.ctx.translate(this.position.x*GLOBALS.scaleFactor.x, this.position.y*GLOBALS.scaleFactor.y);
       if(this.sprite instanceof Sprite) {
         GLOBALS.ctx.drawImage(this.sprite.image, 0, 0, this.sprite.width*GLOBALS.scaleFactor.x, this.sprite.height*GLOBALS.scaleFactor.y);
@@ -21,7 +23,24 @@ class StaticBody extends Actor {
         GLOBALS.ctx.fillStyle = "magenta";
         GLOBALS.ctx.fillRect(0,0,this.dimensions.width*GLOBALS.scaleFactor.x,this.dimensions.height*GLOBALS.scaleFactor.y);
       }
+      if (GLOBALS.debug) {
+        GLOBALS.ctx.strokeStyle = "limegreen";
+        GLOBALS.ctx.resetTransform();
+        const bb = this.getBoundingBox();
+        GLOBALS.ctx.strokeRect(bb.x*GLOBALS.scaleFactor.x,bb.y*GLOBALS.scaleFactor.y,bb.width*GLOBALS.scaleFactor.x,bb.height*GLOBALS.scaleFactor.y);
+      }
+      GLOBALS.ctx.fillStyle = saveFillStyle;
+      GLOBALS.ctx.strokeStyle = saveStrokeStyle;
       GLOBALS.ctx.resetTransform();
+  }
+
+  getBoundingBox() {
+    return {
+      x: this.position.x,
+      y: this.position.y,
+      width: this.dimensions.width,
+      height: this.dimensions.height,
+    }
   }
 }
 

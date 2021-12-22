@@ -19,3 +19,13 @@ test("StaticBody has position (x,y) and dimensions (width, height)", () => {
         height:10,
     });
 });
+
+test("StaticBody returns an axis aligned Bounding Box that per default is at (x,y) with dimensions (width,height)", () => {
+    const testStaticBody = new StaticBody(100,100,50,50);
+    expect(testStaticBody.getBoundingBox()).toEqual({
+        x:100,
+        y:100,
+        width: 50,
+        height: 50,
+    });
+})

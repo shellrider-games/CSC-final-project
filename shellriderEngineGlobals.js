@@ -4,4 +4,5 @@ export const GLOBALS = {
     mouse: undefined,
     touch: undefined,
     images: {},
+    debug: false,
 }

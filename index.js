@@ -2,58 +2,98 @@ import ShellriderEngine from "./shellriderEngine.js";
 import { GLOBALS } from "./shellriderEngineGlobals.js";
 import StaticBody from "./staticBody.js";
 
+window.toggleDebug = function () {
+  GLOBALS.debug = !GLOBALS.debug;
+  return GLOBALS.debug;
+};
 
 window.onload = async () => {
-    
-    const canvas = document.querySelector("#gameCanvas");
-    const engine = new ShellriderEngine(canvas);
-    const fullSreenButton = document.querySelector("#fullscreen");
-    
+  const canvas = document.querySelector("#gameCanvas");
+  const engine = new ShellriderEngine(canvas);
+  const fullSreenButton = document.querySelector("#fullscreen");
 
-    function canvasFullscreen() {
-        if(document.body.requestFullscreen){
-            document.body.requestFullscreen();
-        } else if (document.body.webkitRequestFullscreen) {
-            document.body.webkitRequestFullscreen();
-        }
+  function canvasFullscreen() {
+    if (document.body.requestFullscreen) {
+      document.body.requestFullscreen();
+    } else if (document.body.webkitRequestFullscreen) {
+      document.body.webkitRequestFullscreen();
+    }
+  }
+
+  document.body.addEventListener("fullscreenchange", (event) => {
+    if (document.fullscreenElement) {
+      fullSreenButton.style.display = "none";
+    } else {
+      fullSreenButton.style.display = "block";
+    }
+  });
+
+  fullSreenButton.addEventListener("click", canvasFullscreen);
+
+  engine.init();
+
+  engine.preUpdates = () => {
+    GLOBALS.canvasSize.height = Math.min(
+      (window.innerWidth / 9) * 16,
+      window.innerHeight
+    );
+    GLOBALS.canvasSize.width = Math.min(
+      (window.innerHeight / 16) * 9,
+      window.innerWidth
+    );
+  };
+  const playerShip = new StaticBody(
+    0,
+    GLOBALS.virtualScreenSize.height - 220,
+    99,
+    75
+  );
+  playerShip.sprite = await engine.requestSprite(
+    "./assets/img/playerShip1_red.png"
+  );
+
+  playerShip.speed = 400;
+  playerShip.getBoundingBox = () => {
+    let bb = {
+      x: playerShip.position.x,
+      y: playerShip.position.y + 25,
+      width: playerShip.dimensions.width,
+      height: playerShip.dimensions.height - 40,
+    };
+    return bb;
+  };
+  playerShip.update = (delta) => {
+    let goalX;
+    if (GLOBALS.touch.active) {
+      goalX = Math.min(
+        Math.max(GLOBALS.touch.x - playerShip.dimensions.width / 2, 0),
+        GLOBALS.virtualScreenSize.width - playerShip.dimensions.width
+      );
+      GLOBALS.mouse.x = goalX;
+    } else {
+      goalX = Math.min(
+        Math.max(GLOBALS.mouse.x - playerShip.dimensions.width / 2, 0),
+        GLOBALS.virtualScreenSize.width - playerShip.dimensions.width
+      );
     }
 
-    document.body.addEventListener('fullscreenchange', (event) => {
-        if(document.fullscreenElement){
-            fullSreenButton.style.display = "none";
-        } else {
-            fullSreenButton.style.display = "block";
-        }
-    });
+    Math.min(
+      Math.max(GLOBALS.mouse.x - playerShip.dimensions.width / 2, 0),
+      GLOBALS.virtualScreenSize.width - playerShip.dimensions.width
+    );
 
-    fullSreenButton.addEventListener("click", canvasFullscreen);
+    goalX > playerShip.position.x
+      ? (playerShip.position.x = Math.min(
+          playerShip.position.x + playerShip.speed * delta,
+          goalX
+        ))
+      : (playerShip.position.x = Math.max(
+          playerShip.position.x - playerShip.speed * delta,
+          goalX
+        ));
+  };
 
-    engine.init();
-    
-    engine.preUpdates = () => {
-        GLOBALS.canvasSize.height = Math.min(window.innerWidth/9*16,window.innerHeight) 
-        GLOBALS.canvasSize.width = Math.min(window.innerHeight/16*9,window.innerWidth);
-    }
-    const playerShip = new StaticBody(0,GLOBALS.virtualScreenSize.height-220,99,75);
-    playerShip.sprite = await engine.requestSprite("./assets/img/playerShip1_red.png");
+  engine.addActor(playerShip);
 
-    playerShip.speed = 400;
-    playerShip.update = (delta) => {
-        let goalX;
-        if (GLOBALS.touch.active) {
-            goalX =  Math.min(Math.max(GLOBALS.touch.x-playerShip.dimensions.width/2,0),GLOBALS.virtualScreenSize.width - playerShip.dimensions.width);
-            GLOBALS.mouse.x = goalX;
-        } else {
-            goalX = Math.min(Math.max(GLOBALS.mouse.x-playerShip.dimensions.width/2,0),GLOBALS.virtualScreenSize.width - playerShip.dimensions.width);
-        }
-
-Math.min(Math.max(GLOBALS.mouse.x-playerShip.dimensions.width/2,0),GLOBALS.virtualScreenSize.width - playerShip.dimensions.width);
-
-        goalX > playerShip.position.x ? playerShip.position.x = Math.min(playerShip.position.x + (playerShip.speed*delta),goalX) : playerShip.position.x = Math.max(playerShip.position.x - (playerShip.speed*delta),goalX);
-    }
-    
-    
-    engine.addActor(playerShip);    
-    
-    engine.run();
-}
+  engine.run();
+};
