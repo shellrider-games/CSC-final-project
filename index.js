@@ -2,6 +2,7 @@ import ShellriderEngine from "./shellriderEngine.js";
 import { GLOBALS } from "./shellriderEngineGlobals.js";
 import { randomNumberBetween } from "./toolBox.js";
 import StaticBody from "./staticBody.js";
+import Actor from "./actor.js";
 
 window.toggleDebug = function () {
   GLOBALS.debug = !GLOBALS.debug;
@@ -9,6 +10,15 @@ window.toggleDebug = function () {
 };
 
 window.onload = async () => {
+  let vh = window.innerHeight * 0.01;
+  document.body.style.setProperty('--vh', `${vh}px`);
+
+  window.addEventListener('resize', () => {
+    let vh = window.innerHeight * 0.01;
+    document.body.style.setProperty('--vh', `${vh}px`);
+  });
+
+
   const canvas = document.querySelector("#gameCanvas");
   const engine = new ShellriderEngine(canvas);
   const fullSreenButton = document.querySelector("#fullscreen");
@@ -113,17 +123,31 @@ window.onload = async () => {
         ));
   };
 
-  const asteroidGenerator = () => {
-    setTimeout(() => {
-      const asteroid = new Asteroid(
-        randomNumberBetween(0, GLOBALS.virtualScreenSize.width - 101),0
-      );
-      engine.addActor(asteroid);
-      asteroidGenerator();
-      }, randomNumberBetween(250,750));
-  };
+  class AsteroidGenerator extends Actor {
+    timeTracker;
+    nextSpawn;
+    constructor () {
+      super();
+      this.timeTracker = 0;
+      this.nextSpawn = randomNumberBetween(250,750)/1000;
+    }
+    update(delta) {
+      this.timeTracker += delta;
+      if(this.timeTracker >= this.nextSpawn) {
+        const asteroid = new Asteroid(
+          randomNumberBetween(0, GLOBALS.virtualScreenSize.width - 101),-100
+        );
+        engine.addActor(asteroid);
+        this.timeTracker -= this.nextSpawn;
+        this.nextSpawn = randomNumberBetween(250,750)/1000;
+      }
+    }
 
-  asteroidGenerator();
+  }
+
+  const asteroidGenerator = new AsteroidGenerator();
+
+  engine.addActor(asteroidGenerator);
   engine.addActor(playerShip);
   engine.run();
 };
