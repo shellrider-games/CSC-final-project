@@ -173,8 +173,20 @@ window.onload = async () => {
   startScene.preUpdates = () => {
     canvasAutoAdjust();
   }
+  startScene.postRenders = () => {
+    GLOBALS.ctx.fillStyle = "#efefef";
+    GLOBALS.ctx.font = `42px Arial`;
+    const txt = "Click/Touch to Start";
+    GLOBALS.ctx.scale(GLOBALS.scaleFactor.x,GLOBALS.scaleFactor.y);
+    GLOBALS.ctx.fillText(txt,GLOBALS.virtualScreenSize.width/2-GLOBALS.ctx.measureText(txt).width/2,GLOBALS.virtualScreenSize.height/2);
+    GLOBALS.ctx.resetTransform();
+  }
+  startScene.postUpdates = () => {
+    if (GLOBALS.mouse.down || GLOBALS.touch.active) {
+      engine.loadScene(spaceGameScene);
+    }
+  }
 
   engine.loadScene(startScene);
 
-  setTimeout(() => {engine.loadScene(spaceGameScene)},10000);
 };
