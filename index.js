@@ -65,11 +65,11 @@ window.onload = async () => {
     GLOBALS.canvasSize.height = Math.min(
       (window.innerWidth / 9) * 16,
       window.innerHeight
-    );
+    )-1 ;
     GLOBALS.canvasSize.width = Math.min(
       (window.innerHeight / 16) * 9,
       window.innerWidth
-    );
+    )-1;
   };
 
   const playerShip = new StaticBody(
@@ -138,7 +138,7 @@ window.onload = async () => {
           randomNumberBetween(0, GLOBALS.virtualScreenSize.width - 101),-100
         );
         engine.addActor(asteroid);
-        this.timeTracker -= this.nextSpawn;
+        this.timeTracker = 0; //at zero to prevent multiple spawns on window focus
         this.nextSpawn = randomNumberBetween(250,750)/1000;
       }
     }
