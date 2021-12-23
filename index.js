@@ -3,6 +3,7 @@ import { GLOBALS } from "./shellriderEngineGlobals.js";
 import { randomNumberBetween } from "./toolBox.js";
 import StaticBody from "./staticBody.js";
 import Actor from "./actor.js";
+import Scene from "./scene.js";
 
 window.toggleDebug = function () {
   GLOBALS.debug = !GLOBALS.debug;
@@ -43,10 +44,10 @@ window.onload = async () => {
 
   engine.init();
 
+  const spaceGameScene = new Scene();
+  
   await engine.audio.loadSound("./assets/audio/effects/explosion.wav", "explosion");
-
   const asteroids = [];
-
   const asteroidSprite = await engine.requestSprite(
     "./assets/img/meteorGrey_big1.png"
   );
@@ -66,7 +67,7 @@ window.onload = async () => {
     }
   }
 
-  engine.preUpdates = () => {
+  const canvasAutoAdjust = function(){
     GLOBALS.canvasSize.height = Math.min(
       (window.innerWidth / 9) * 16,
       window.innerHeight
@@ -75,9 +76,13 @@ window.onload = async () => {
       (window.innerHeight / 16) * 9,
       window.innerWidth
     )-1;
+  }
+
+  spaceGameScene.preUpdates = () => {
+    canvasAutoAdjust();
   };
 
-  engine.postUpdates = () => {
+  spaceGameScene.postUpdates = () => {
     asteroids.forEach((asteroid) => {
       if(engine.physics.collide(asteroid, playerShip)){
         engine.audio.play("explosion");
@@ -161,8 +166,15 @@ window.onload = async () => {
 
   }
   const asteroidGenerator = new AsteroidGenerator();
+  spaceGameScene.actors.push(asteroidGenerator);
+  spaceGameScene.actors.push(playerShip);
 
-  engine.addActor(asteroidGenerator);
-  engine.addActor(playerShip);
-  engine.run();
+  const startScene = new Scene();
+  startScene.preUpdates = () => {
+    canvasAutoAdjust();
+  }
+
+  engine.loadScene(startScene);
+
+  setTimeout(() => {engine.loadScene(spaceGameScene)},10000);
 };
