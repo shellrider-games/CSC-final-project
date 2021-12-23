@@ -1,8 +1,8 @@
 class Actor {
-    constructor(){}
+  constructor() {}
 
-    update(delta) {}
-    render(){}
+  update(delta) {}
+  render() {}
 }
 
 export default Actor;

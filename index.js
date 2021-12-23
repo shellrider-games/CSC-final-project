@@ -12,13 +12,12 @@ window.toggleDebug = function () {
 
 window.onload = async () => {
   let vh = window.innerHeight * 0.01;
-  document.body.style.setProperty('--vh', `${vh}px`);
+  document.body.style.setProperty("--vh", `${vh}px`);
 
-  window.addEventListener('resize', () => {
+  window.addEventListener("resize", () => {
     let vh = window.innerHeight * 0.01;
-    document.body.style.setProperty('--vh', `${vh}px`);
+    document.body.style.setProperty("--vh", `${vh}px`);
   });
-
 
   const canvas = document.querySelector("#gameCanvas");
   const engine = new ShellriderEngine(canvas);
@@ -45,8 +44,11 @@ window.onload = async () => {
   engine.init();
 
   const spaceGameScene = new Scene();
-  
-  await engine.audio.loadSound("./assets/audio/effects/explosion.wav", "explosion");
+
+  await engine.audio.loadSound(
+    "./assets/audio/effects/explosion.wav",
+    "explosion"
+  );
   const asteroids = [];
   const asteroidSprite = await engine.requestSprite(
     "./assets/img/meteorGrey_big1.png"
@@ -61,22 +63,18 @@ window.onload = async () => {
     update(delta) {
       this.position.y += 300 * delta;
       if (this.position.y >= GLOBALS.virtualScreenSize.height + 200) {
-        asteroids.splice(asteroids.indexOf(this),1);
+        asteroids.splice(asteroids.indexOf(this), 1);
         engine.removeActor(this);
       }
     }
   }
 
-  const canvasAutoAdjust = function(){
-    GLOBALS.canvasSize.height = Math.min(
-      (window.innerWidth / 9) * 16,
-      window.innerHeight
-    )-1 ;
-    GLOBALS.canvasSize.width = Math.min(
-      (window.innerHeight / 16) * 9,
-      window.innerWidth
-    )-1;
-  }
+  const canvasAutoAdjust = function () {
+    GLOBALS.canvasSize.height =
+      Math.min((window.innerWidth / 9) * 16, window.innerHeight) - 1;
+    GLOBALS.canvasSize.width =
+      Math.min((window.innerHeight / 16) * 9, window.innerWidth) - 1;
+  };
 
   spaceGameScene.preUpdates = () => {
     canvasAutoAdjust();
@@ -84,13 +82,13 @@ window.onload = async () => {
 
   spaceGameScene.postUpdates = () => {
     asteroids.forEach((asteroid) => {
-      if(engine.physics.collide(asteroid, playerShip)){
+      if (engine.physics.collide(asteroid, playerShip)) {
         engine.audio.play("explosion");
-        asteroids.splice(asteroids.indexOf(asteroid),1);
+        asteroids.splice(asteroids.indexOf(asteroid), 1);
         engine.removeActor(asteroid);
       }
     });
-  }
+  };
 
   const playerShip = new StaticBody(
     0,
@@ -146,24 +144,24 @@ window.onload = async () => {
   class AsteroidGenerator extends Actor {
     timeTracker;
     nextSpawn;
-    constructor () {
+    constructor() {
       super();
       this.timeTracker = 0;
-      this.nextSpawn = randomNumberBetween(250,750)/1000;
+      this.nextSpawn = randomNumberBetween(250, 750) / 1000;
     }
     update(delta) {
       this.timeTracker += delta;
-      if(this.timeTracker >= this.nextSpawn) {
+      if (this.timeTracker >= this.nextSpawn) {
         const asteroid = new Asteroid(
-          randomNumberBetween(0, GLOBALS.virtualScreenSize.width - 101),-100
+          randomNumberBetween(0, GLOBALS.virtualScreenSize.width - 101),
+          -100
         );
         asteroids.push(asteroid);
         engine.addActor(asteroid);
         this.timeTracker = 0; //at zero to prevent multiple spawns on window focus
-        this.nextSpawn = randomNumberBetween(250,750)/1000;
+        this.nextSpawn = randomNumberBetween(250, 750) / 1000;
       }
     }
-
   }
   const asteroidGenerator = new AsteroidGenerator();
   spaceGameScene.actors.push(asteroidGenerator);
@@ -172,21 +170,25 @@ window.onload = async () => {
   const startScene = new Scene();
   startScene.preUpdates = () => {
     canvasAutoAdjust();
-  }
+  };
   startScene.postRenders = () => {
     GLOBALS.ctx.fillStyle = "#efefef";
     GLOBALS.ctx.font = `42px Arial`;
     const txt = "Click/Touch to Start";
-    GLOBALS.ctx.scale(GLOBALS.scaleFactor.x,GLOBALS.scaleFactor.y);
-    GLOBALS.ctx.fillText(txt,GLOBALS.virtualScreenSize.width/2-GLOBALS.ctx.measureText(txt).width/2,GLOBALS.virtualScreenSize.height/2);
+    GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
+    GLOBALS.ctx.fillText(
+      txt,
+      GLOBALS.virtualScreenSize.width / 2 -
+        GLOBALS.ctx.measureText(txt).width / 2,
+      GLOBALS.virtualScreenSize.height / 2
+    );
     GLOBALS.ctx.resetTransform();
-  }
+  };
   startScene.postUpdates = () => {
     if (GLOBALS.mouse.down || GLOBALS.touch.active) {
       engine.loadScene(spaceGameScene);
     }
-  }
+  };
 
   engine.loadScene(startScene);
-
 };
