@@ -49,10 +49,13 @@ window.onload = async () => {
     "./assets/audio/effects/explosion.wav",
     "explosion"
   );
+  await engine.audio.loadSound("./assets/audio/effects/laser.wav", "laser");
   const asteroids = [];
+  const playerShots = [];
   const asteroidSprite = await engine.requestSprite(
     "./assets/img/meteorGrey_big1.png"
   );
+  const laserShotSprite = await engine.requestSprite("./assets/img/laserGreen13.png");
 
   class Asteroid extends StaticBody {
     constructor(x, y, width = 101, height = 84) {
@@ -90,6 +93,21 @@ window.onload = async () => {
     });
   };
 
+  class PlayerShot extends StaticBody {
+    constructor(x,y,width = 9,height = 37) {
+      super(x,y,width,height);
+      this.sprite = laserShotSprite;
+    }
+    update(delta) {
+      this.position.y -= 1000 * delta;
+      if (this.position.y <= -200) {
+        playerShots.splice(playerShots.indexOf(this), 1);
+        engine.removeActor(this);
+      }
+    }
+
+  }
+
   const playerShip = new StaticBody(
     0,
     GLOBALS.virtualScreenSize.height - 220,
@@ -100,7 +118,8 @@ window.onload = async () => {
     "./assets/img/playerShip1_red.png"
   );
 
-  playerShip.speed = 400;
+  playerShip.speed = 500;
+  playerShip.shotDelay = 0;
   playerShip.getBoundingBox = () => {
     let bb = {
       x: playerShip.position.x,
@@ -112,6 +131,8 @@ window.onload = async () => {
   };
   playerShip.update = (delta) => {
     let goalX;
+    playerShip.shotDelay = Math.max(playerShip.shotDelay - delta, 0);
+
     if (GLOBALS.touch.active) {
       goalX = Math.min(
         Math.max(GLOBALS.touch.x - playerShip.dimensions.width / 2, 0),
@@ -139,6 +160,14 @@ window.onload = async () => {
           playerShip.position.x - playerShip.speed * delta,
           goalX
         ));
+    
+    if((GLOBALS.touch.active || GLOBALS.mouse.down) && playerShip.shotDelay === 0){
+      const newShot = new PlayerShot(playerShip.position.x + playerShip.dimensions.width/2, playerShip.position.y+5);
+      playerShip.shotDelay = 0.25;
+      engine.audio.play("laser");
+      playerShots.push(newShot);
+      engine.addActor(newShot);
+    }
   };
 
   class AsteroidGenerator extends Actor {
