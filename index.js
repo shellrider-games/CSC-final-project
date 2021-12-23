@@ -43,6 +43,8 @@ window.onload = async () => {
 
   engine.init();
 
+  const asteroids = [];
+
   const asteroidSprite = await engine.requestSprite(
     "./assets/img/meteorGrey_big1.png"
   );
@@ -56,6 +58,7 @@ window.onload = async () => {
     update(delta) {
       this.position.y += 300 * delta;
       if (this.position.y >= GLOBALS.virtualScreenSize.height + 200) {
+        asteroids.splice(asteroids.indexOf(this),1);
         engine.removeActor(this);
       }
     }
@@ -71,6 +74,16 @@ window.onload = async () => {
       window.innerWidth
     )-1;
   };
+
+  engine.postUpdates = () => {
+    asteroids.forEach((asteroid) => {
+      if(engine.physics.collide(asteroid, playerShip)){
+        console.log("collision, explosion, boom");
+        asteroids.splice(asteroids.indexOf(asteroid),1);
+        engine.removeActor(asteroid);
+      }
+    });
+  }
 
   const playerShip = new StaticBody(
     0,
@@ -137,6 +150,7 @@ window.onload = async () => {
         const asteroid = new Asteroid(
           randomNumberBetween(0, GLOBALS.virtualScreenSize.width - 101),-100
         );
+        asteroids.push(asteroid);
         engine.addActor(asteroid);
         this.timeTracker = 0; //at zero to prevent multiple spawns on window focus
         this.nextSpawn = randomNumberBetween(250,750)/1000;
@@ -144,7 +158,6 @@ window.onload = async () => {
     }
 
   }
-
   const asteroidGenerator = new AsteroidGenerator();
 
   engine.addActor(asteroidGenerator);

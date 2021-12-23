@@ -1,10 +1,12 @@
 import Actor from "./actor.js";
+import ShellPhysicsEngine from "./shellPhysicsEngine.js";
 import { GLOBALS } from "./shellriderEngineGlobals.js";
 import Sprite from "./sprite.js";
 
 class ShellriderEngine {
   actors;
   lastTimestamp;
+  physics;
   preUpdates = function () {};
   postUpdates = function () {};
   preRenders = function () {};
@@ -34,6 +36,7 @@ class ShellriderEngine {
         active: false,
       }
     }
+    this.physics = new ShellPhysicsEngine();
     this.actors = [];
   }
 
