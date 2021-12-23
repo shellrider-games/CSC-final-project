@@ -29,4 +29,4 @@ test("Check if two staticBody collide", ()=> {
     expect(testPhysicsEngine.collide(obj1,obj2)).toBe(true);
     expect(testPhysicsEngine.collide(obj1,obj3)).toBe(true);
     expect(testPhysicsEngine.collide(obj3,obj2)).toBe(false);
-})
+});

@@ -1,4 +1,5 @@
 import Actor from "./actor.js";
+import ShellAudioSystem from "./shellAudioSystem.js";
 import ShellPhysicsEngine from "./shellPhysicsEngine.js";
 import { GLOBALS } from "./shellriderEngineGlobals.js";
 import Sprite from "./sprite.js";
@@ -7,6 +8,7 @@ class ShellriderEngine {
   actors;
   lastTimestamp;
   physics;
+  audio;
   preUpdates = function () {};
   postUpdates = function () {};
   preRenders = function () {};
@@ -37,6 +39,7 @@ class ShellriderEngine {
       }
     }
     this.physics = new ShellPhysicsEngine();
+    this.audio = new ShellAudioSystem();
     this.actors = [];
   }
 

@@ -43,6 +43,8 @@ window.onload = async () => {
 
   engine.init();
 
+  await engine.audio.loadSound("./assets/audio/effects/explosion.wav", "explosion");
+
   const asteroids = [];
 
   const asteroidSprite = await engine.requestSprite(
@@ -78,7 +80,7 @@ window.onload = async () => {
   engine.postUpdates = () => {
     asteroids.forEach((asteroid) => {
       if(engine.physics.collide(asteroid, playerShip)){
-        console.log("collision, explosion, boom");
+        engine.audio.play("explosion");
         asteroids.splice(asteroids.indexOf(asteroid),1);
         engine.removeActor(asteroid);
       }
