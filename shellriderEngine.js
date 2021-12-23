@@ -33,6 +33,7 @@ class ShellriderEngine {
       GLOBALS.mouse = {
         x: 0,
         y: 0,
+        down: false,
       };
       GLOBALS.touch = {
         x: 0,
@@ -83,6 +84,7 @@ class ShellriderEngine {
       });
       this.postRenders();
 
+      GLOBALS.mouse.justClicked = false;
       requestAnimationFrame(() => {
         this.engineLoop();
       });
@@ -97,6 +99,13 @@ class ShellriderEngine {
       GLOBALS.mouse.y =
         (event.clientY - canvasBounds.top) / GLOBALS.scaleFactor.y;
     };
+    document.onmousedown = () => {
+      GLOBALS.mouse.down = true;
+      GLOBALS.mouse.justClicked = true;
+    };
+    document.onmouseup = () => {
+      GLOBALS.mouse.down = false;
+    }
   }
 
   initTouch() {
