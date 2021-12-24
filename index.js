@@ -57,6 +57,54 @@ window.onload = async () => {
   );
   const laserShotSprite = await engine.requestSprite("./assets/img/laserGreen13.png");
 
+  class LevelStep extends Actor{
+    next;
+    constructor(update = function(delta){}){
+      super();
+      this.update = update;
+      this.next = false;
+    }
+  }
+
+  class LevelScript extends Actor{
+    steps;
+    currentIndex;
+    constructor(steps = [], currentIndex = -1){
+      super();
+      this.steps = steps;
+      this.currentIndex = currentIndex;
+    }
+    update(delta){
+      if(this.currentIndex < this.steps.length-1){
+        if(this.currentIndex < 0 && this.steps.length >= 1){
+          this.currentIndex = 0;
+          engine.addActor(this.steps[0]);
+        }
+        if(this.steps[this.currentIndex].next){
+          engine.addActor(this.steps[++this.currentIndex]);
+        }
+      }
+    }
+  }
+
+  const waitStep = new LevelStep((delta)=> {
+    waitStep.timePassed += delta;
+    if(waitStep.timePassed >= 0.5){
+      waitStep.next = true;
+      engine.removeActor(waitStep);
+    }
+  });
+  waitStep.timePassed = 0;
+
+  const asteroidStep = new LevelStep((delta)=>{
+    const asteroidGenerator = new AsteroidGenerator();
+    engine.addActor(asteroidGenerator);
+    engine.removeActor(asteroidStep);
+    asteroidStep.next = true;
+  });
+
+  const spaceGameScript = new LevelScript([waitStep,asteroidStep]);
+
   class Asteroid extends StaticBody {
     constructor(x, y, width = 101, height = 84) {
       super(x, y, width, height);
@@ -90,6 +138,12 @@ window.onload = async () => {
         asteroids.splice(asteroids.indexOf(asteroid), 1);
         engine.removeActor(asteroid);
       }
+      playerShots.forEach((shot) => {
+        if (engine.physics.collide(asteroid,shot)) {
+          playerShots.splice(playerShots.indexOf(shot),1);
+          engine.removeActor(shot);
+        }
+      })
     });
   };
 
@@ -162,7 +216,7 @@ window.onload = async () => {
         ));
     
     if((GLOBALS.touch.active || GLOBALS.mouse.down) && playerShip.shotDelay === 0){
-      const newShot = new PlayerShot(playerShip.position.x + playerShip.dimensions.width/2, playerShip.position.y+5);
+      const newShot = new PlayerShot(playerShip.position.x + playerShip.dimensions.width/2 - laserShotSprite.width/2, playerShip.position.y  - playerShip.dimensions.height/2);
       playerShip.shotDelay = 0.25;
       engine.audio.play("laser");
       playerShots.push(newShot);
@@ -192,9 +246,9 @@ window.onload = async () => {
       }
     }
   }
-  const asteroidGenerator = new AsteroidGenerator();
-  spaceGameScene.actors.push(asteroidGenerator);
+
   spaceGameScene.actors.push(playerShip);
+  spaceGameScene.actors.push(spaceGameScript);
 
   const startScene = new Scene();
   startScene.preUpdates = () => {
