@@ -10,10 +10,7 @@ class ShellriderEngine {
   lastTimestamp;
   physics;
   audio;
-  preUpdates = function () {};
-  postUpdates = function () {};
-  preRenders = function () {};
-  postRenders = function () {};
+  currentScene;
 
   constructor(
     canvas,
@@ -73,16 +70,16 @@ class ShellriderEngine {
       this.lastTimestamp = performance.now();
       this.updateCanvasSize();
 
-      this.preUpdates();
+      this.currentScene.preUpdates();
       this.actors.forEach((actor) => {
         actor.update(delta);
       });
-      this.postUpdates();
-      this.preRenders();
+      this.currentScene.postUpdates();
+      this.currentScene.preRenders();
       this.actors.forEach((actor) => {
         actor.render();
       });
-      this.postRenders();
+      this.currentScene.postRenders();
 
       GLOBALS.mouse.justClicked = false;
       requestAnimationFrame(() => {
@@ -132,13 +129,12 @@ class ShellriderEngine {
   }
 
   loadScene(scene) {
+    const sceneCopy = scene;
     if (scene instanceof Scene) {
       GLOBALS.pause = true;
-      this.preUpdates = scene.preUpdates;
-      this.postUpdates = scene.postUpdates;
-      this.preRenders = scene.preRenders;
-      this.postRenders = scene.postRenders;
-      this.actors = scene.actors;
+      this.currentScene = sceneCopy;
+      sceneCopy.onSceneEntry();
+      this.actors = sceneCopy.actors;
       this.run();
     }
   }
