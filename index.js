@@ -68,6 +68,7 @@ window.onload = async () => {
   const playerShipSprite = await engine.requestSprite(
     "./assets/img/playerShip1_red.png"
   );
+  const shieldSprite = await engine.requestSprite("./assets/img/shield1.png");
 
   class LevelStep extends Actor {
     next;
@@ -273,11 +274,13 @@ window.onload = async () => {
         engine.audio.play("explosion");
         asteroids.splice(asteroids.indexOf(asteroid), 1);
         engine.removeActor(asteroid);
+        playerShip.destroyShield();
       }
       playerShots.forEach((shot) => {
         if (engine.physics.collide(asteroid, shot)) {
           playerShots.splice(playerShots.indexOf(shot), 1);
           engine.removeActor(shot);
+          
         }
       });
     });
@@ -286,6 +289,7 @@ window.onload = async () => {
         engine.audio.play("explosion");
         enemyShots.splice(enemyShots.indexOf(enemyShot), 1);
         engine.removeActor(enemyShot);
+        playerShip.destroyShield();
       }
     });
   };
@@ -307,6 +311,8 @@ window.onload = async () => {
   class PlayerShip extends StaticBody {
     speed;
     shotDelay;
+    shield;
+    nextShield;
 
     constructor(
       x = 0,
@@ -318,6 +324,8 @@ window.onload = async () => {
       this.sprite = playerShipSprite;
       this.speed = 500;
       this.shotDelay = 0;
+      this.shield = true;
+      this.nextShield = 0;
     }
 
     getBoundingBox() {
@@ -333,6 +341,7 @@ window.onload = async () => {
     update(delta) {
       let goalX;
       this.shotDelay = Math.max(this.shotDelay - delta, 0);
+      this.nextShield = Math.max(this.nextShield - delta, 0);
 
       if (GLOBALS.touch.active) {
         goalX = Math.min(
@@ -346,7 +355,6 @@ window.onload = async () => {
           GLOBALS.virtualScreenSize.width - this.dimensions.width
         );
       }
-
       Math.min(
         Math.max(GLOBALS.mouse.x - this.dimensions.width / 2, 0),
         GLOBALS.virtualScreenSize.width - this.dimensions.width
@@ -377,7 +385,24 @@ window.onload = async () => {
         playerShots.push(newShot);
         engine.addActor(newShot);
       }
+      if(!this.shield && this.nextShield <= 0){
+        this.shield = true;
+      }
     }
+    render() {
+      super.render();
+      if (this.shield) {
+        GLOBALS.ctx.scale(GLOBALS.scaleFactor.x,GLOBALS.scaleFactor.y);
+        GLOBALS.ctx.translate(this.position.x + this.dimensions.width/2 - shieldSprite.width/2, this.position.y-20);
+        GLOBALS.ctx.drawImage(shieldSprite.image,0,0);
+        GLOBALS.ctx.resetTransform();
+      }
+    }
+    destroyShield(){
+      this.shield = false;
+      this.nextShield = 10;
+    }
+
   }
 
   const playerShip = new PlayerShip();
