@@ -47,11 +47,9 @@ window.onload = async () => {
       fullSreenButton.style.display = "block";
     }
   });
-
   fullSreenButton.addEventListener("click", canvasFullscreen);
 
   engine.init();
-
   await engine.audio.loadSound(
     "./assets/audio/effects/explosion.wav",
     "explosion"
@@ -113,6 +111,30 @@ window.onload = async () => {
     }
   }
 
+  class Asteroid extends StaticBody {
+    constructor(x, y, width = 101, height = 84) {
+      super(x, y, width, height);
+      this.sprite = asteroidSprite;
+    }
+
+    update(delta) {
+      this.position.y += 300 * delta;
+      if (this.position.y >= GLOBALS.virtualScreenSize.height + 200) {
+        asteroids.splice(asteroids.indexOf(this), 1);
+        engine.removeActor(this);
+      }
+    }
+
+    getBoundingBox() {
+      return {
+        x: this.position.x + 8,
+        y: this.position.y,
+        width: this.dimensions.width - 16,
+        height: this.dimensions.height - 16,
+      };
+    }
+  }
+
   class AsteroidGenerator extends Actor {
     timeTracker;
     nextSpawn;
@@ -132,6 +154,20 @@ window.onload = async () => {
         engine.addActor(asteroid);
         this.timeTracker = 0; //at zero to prevent multiple spawns on window focus
         this.nextSpawn = randomNumberBetween(250, 750) / 1000;
+      }
+    }
+  }
+
+  class PlayerShot extends StaticBody {
+    constructor(x, y, width = 9, height = 37) {
+      super(x, y, width, height);
+      this.sprite = laserShotSprite;
+    }
+    update(delta) {
+      this.position.y -= 1000 * delta;
+      if (this.position.y <= -200) {
+        playerShots.splice(playerShots.indexOf(this), 1);
+        engine.removeActor(this);
       }
     }
   }
@@ -246,30 +282,6 @@ window.onload = async () => {
     }
   }
 
-  class Asteroid extends StaticBody {
-    constructor(x, y, width = 101, height = 84) {
-      super(x, y, width, height);
-      this.sprite = asteroidSprite;
-    }
-
-    update(delta) {
-      this.position.y += 300 * delta;
-      if (this.position.y >= GLOBALS.virtualScreenSize.height + 200) {
-        asteroids.splice(asteroids.indexOf(this), 1);
-        engine.removeActor(this);
-      }
-    }
-
-    getBoundingBox() {
-      return {
-        x: this.position.x + 8,
-        y: this.position.y,
-        width: this.dimensions.width - 16,
-        height: this.dimensions.height - 16,
-      };
-    }
-  }
-
   class EnemyShot extends StaticBody {
     //default width and height are smaller than the sprite to make it easier for the player to evade
     constructor(x, y, width = 9, height = 37) {
@@ -351,6 +363,7 @@ window.onload = async () => {
     }
   }
 
+
   class SpaceGameScene extends Scene {
     playerShip;
     constructor() {
@@ -393,7 +406,6 @@ window.onload = async () => {
 
     onSceneEntry() {
       super.onSceneEntry();
-
       class WaitStep extends LevelStep {
         timePassed;
 
@@ -433,8 +445,7 @@ window.onload = async () => {
         }
       }
 
-      const asteroidStep = new AsteroidStep();
-      const asteroidStep2 = new AsteroidStep();
+      
 
       class EnemyStep extends LevelStep {
         init;
@@ -453,6 +464,9 @@ window.onload = async () => {
           this.init = false;
         }
       }
+
+      const asteroidStep = new AsteroidStep();
+      const asteroidStep2 = new AsteroidStep();
 
       const enemyStep = new EnemyStep(() => {
         const enemyGrunt = new EnemyGrunt(0, 0);
@@ -686,19 +700,7 @@ window.onload = async () => {
 
   const spaceGameScene = new SpaceGameScene();
 
-  class PlayerShot extends StaticBody {
-    constructor(x, y, width = 9, height = 37) {
-      super(x, y, width, height);
-      this.sprite = laserShotSprite;
-    }
-    update(delta) {
-      this.position.y -= 1000 * delta;
-      if (this.position.y <= -200) {
-        playerShots.splice(playerShots.indexOf(this), 1);
-        engine.removeActor(this);
-      }
-    }
-  }
+  
 
   const startScene = new Scene();
   startScene.preUpdates = () => {
