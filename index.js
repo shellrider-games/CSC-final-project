@@ -58,7 +58,10 @@ window.onload = async () => {
   );
   await engine.audio.loadSound("./assets/audio/effects/laser.wav", "laser");
   await engine.audio.loadSound("./assets/audio/effects/hit.wav", "hit");
-  await engine.audio.loadSound("./assets/audio/effects/hit_asteroid.wav", "hit_asteroid");
+  await engine.audio.loadSound(
+    "./assets/audio/effects/hit_asteroid.wav",
+    "hit_asteroid"
+  );
   let asteroids = [];
   let playerShots = [];
   let enemyShots = [];
@@ -256,6 +259,15 @@ window.onload = async () => {
         engine.removeActor(this);
       }
     }
+
+    getBoundingBox() {
+      return {
+        x: this.position.x + 8,
+        y: this.position.y,
+        width: this.dimensions.width - 16,
+        height: this.dimensions.height - 16,
+      };
+    }
   }
 
   class EnemyShot extends StaticBody {
@@ -420,139 +432,114 @@ window.onload = async () => {
         }
       }
 
-      const asteroidStep = new AsteroidStep();
       const asteroidStep2 = new AsteroidStep();
 
-      const enemyStep = new LevelStep((delta) => {
-        if (!enemyStep.init) {
-          const enemyGrunt = new EnemyGrunt(0, 0);
-          enemyGrunt.target = {
-            x:
-              GLOBALS.virtualScreenSize.width / 2 -
-              enemyGrunt.dimensions.width / 2,
-            y: 200,
-          };
-          onScreenEnemies.push(enemyGrunt);
-          engine.addActor(enemyGrunt);
-          enemyStep.init = true;
+      class EnemyStep extends LevelStep {
+        init;
+        constructor(init = () => {}, func = (delta) => {}) {
+          super((delta) => {
+            if (!this.init) {
+              init();
+              this.init = true;
+            }
+            func(delta);
+            if (onScreenEnemies.length === 0) {
+              this.next = true;
+              engine.removeActor(this);
+            }
+          });
+          this.init = false;
         }
-        if (onScreenEnemies.length === 0) {
-          enemyStep.next = true;
-          engine.removeActor(enemyStep);
-        }
-      });
-      enemyStep.init = false;
+      }
 
-      const enemyStep2 = new LevelStep((delta) => {
-        if (!enemyStep2.init) {
-          const enemyGrunt = new EnemyGrunt(-100, 0);
-          enemyGrunt.target = {
-            x:
-              GLOBALS.virtualScreenSize.width / 2 -
-              enemyGrunt.dimensions.width / 2 -
-              100,
-            y: 200,
-          };
-          const enemyGrunt2 = new EnemyGrunt(
-            GLOBALS.virtualScreenSize.width,
-            0
-          );
-          enemyGrunt2.target = {
-            x:
-              GLOBALS.virtualScreenSize.width / 2 -
-              enemyGrunt2.dimensions.width / 2 +
-              100,
-            y: 200,
-          };
-          onScreenEnemies.push(enemyGrunt);
-          engine.addActor(enemyGrunt);
-          onScreenEnemies.push(enemyGrunt2);
-          engine.addActor(enemyGrunt2);
-          enemyStep2.init = true;
-        }
-        if (onScreenEnemies.length === 0) {
-          enemyStep2.next = true;
-          engine.removeActor(enemyStep);
-        }
-      });
-      enemyStep2.init = false;
-
-      const enemyStep3 = new LevelStep((delta) => {
-        if (!enemyStep3.init) {
-          const enemyGrunt = new EnemyGrunt(-100, 150);
-          enemyGrunt.target = {
-            x:
-              GLOBALS.virtualScreenSize.width / 2 -
-              enemyGrunt.dimensions.width / 2 -
-              100,
-            y: 200,
-          };
-          const enemyGrunt2 = new EnemyGrunt(
-            GLOBALS.virtualScreenSize.width,
-            150
-          );
-          enemyGrunt2.target = {
-            x:
-              GLOBALS.virtualScreenSize.width / 2 -
-              enemyGrunt2.dimensions.width / 2 +
-              100,
-            y: 200,
-          };
-          const enemyGrunt3 = new EnemyGrunt(-100, 0);
-          enemyGrunt3.target = {
-            x:
-              GLOBALS.virtualScreenSize.width / 2 -
-              enemyGrunt.dimensions.width / 2 -
-              250,
-            y: 100,
-          };
-          const enemyGrunt4 = new EnemyGrunt(
-            GLOBALS.virtualScreenSize.width,
-            0
-          );
-          enemyGrunt4.target = {
-            x:
-              GLOBALS.virtualScreenSize.width / 2 -
-              enemyGrunt2.dimensions.width / 2 +
-              250,
-            y: 100,
-          };
-          onScreenEnemies.push(enemyGrunt);
-          engine.addActor(enemyGrunt);
-          onScreenEnemies.push(enemyGrunt2);
-          engine.addActor(enemyGrunt2);
-          onScreenEnemies.push(enemyGrunt3);
-          engine.addActor(enemyGrunt3);
-          onScreenEnemies.push(enemyGrunt4);
-          engine.addActor(enemyGrunt4);
-          enemyStep3.init = true;
-        }
-        if (onScreenEnemies.length === 0) {
-          enemyStep3.next = true;
-        }
-      });
-      enemyStep3.init = false;
-
-      const movingEnemyStep = new LevelStep((delta) => {
-        const goRight = () => {
-          movingEnemyStep.enemyGrunt.target = {
-            x:
-              GLOBALS.virtualScreenSize.width -
-              movingEnemyStep.enemyGrunt.dimensions.width -
-              10,
-            y: 200,
-          };
-          movingEnemyStep.enemyGrunt.side = "right";
+      const enemyStep = new EnemyStep(() => {
+        const enemyGrunt = new EnemyGrunt(0, 0);
+        enemyGrunt.target = {
+          x:
+            GLOBALS.virtualScreenSize.width / 2 -
+            enemyGrunt.dimensions.width / 2,
+          y: 200,
         };
+        onScreenEnemies.push(enemyGrunt);
+        engine.addActor(enemyGrunt);
+      });
 
-        if (!movingEnemyStep.init) {
+      const enemyStep2 = new EnemyStep(() => {
+        const enemyGrunt = new EnemyGrunt(-100, 0);
+        enemyGrunt.target = {
+          x:
+            GLOBALS.virtualScreenSize.width / 2 -
+            enemyGrunt.dimensions.width / 2 -
+            100,
+          y: 200,
+        };
+        const enemyGrunt2 = new EnemyGrunt(GLOBALS.virtualScreenSize.width, 0);
+        enemyGrunt2.target = {
+          x:
+            GLOBALS.virtualScreenSize.width / 2 -
+            enemyGrunt2.dimensions.width / 2 +
+            100,
+          y: 200,
+        };
+        onScreenEnemies.push(enemyGrunt);
+        engine.addActor(enemyGrunt);
+        onScreenEnemies.push(enemyGrunt2);
+        engine.addActor(enemyGrunt2);
+      });
+
+      const enemyStep3 = new EnemyStep(() => {
+        const enemyGrunt = new EnemyGrunt(-100, 150);
+        enemyGrunt.target = {
+          x:
+            GLOBALS.virtualScreenSize.width / 2 -
+            enemyGrunt.dimensions.width / 2 -
+            100,
+          y: 200,
+        };
+        const enemyGrunt2 = new EnemyGrunt(
+          GLOBALS.virtualScreenSize.width,
+          150
+        );
+        enemyGrunt2.target = {
+          x:
+            GLOBALS.virtualScreenSize.width / 2 -
+            enemyGrunt2.dimensions.width / 2 +
+            100,
+          y: 200,
+        };
+        const enemyGrunt3 = new EnemyGrunt(-100, 0);
+        enemyGrunt3.target = {
+          x:
+            GLOBALS.virtualScreenSize.width / 2 -
+            enemyGrunt.dimensions.width / 2 -
+            250,
+          y: 100,
+        };
+        const enemyGrunt4 = new EnemyGrunt(GLOBALS.virtualScreenSize.width, 0);
+        enemyGrunt4.target = {
+          x:
+            GLOBALS.virtualScreenSize.width / 2 -
+            enemyGrunt2.dimensions.width / 2 +
+            250,
+          y: 100,
+        };
+        onScreenEnemies.push(enemyGrunt);
+        engine.addActor(enemyGrunt);
+        onScreenEnemies.push(enemyGrunt2);
+        engine.addActor(enemyGrunt2);
+        onScreenEnemies.push(enemyGrunt3);
+        engine.addActor(enemyGrunt3);
+        onScreenEnemies.push(enemyGrunt4);
+        engine.addActor(enemyGrunt4);
+      });
+
+      const movingEnemyStep = new EnemyStep(() => {
           movingEnemyStep.enemyGrunt = new EnemyGrunt(-100, 200);
-          goRight();
+          movingEnemyStep.goRight();
           onScreenEnemies.push(movingEnemyStep.enemyGrunt);
           engine.addActor(movingEnemyStep.enemyGrunt);
           movingEnemyStep.init = true;
-        }
-
+      },(delta) => {
         if (
           movingEnemyStep.enemyGrunt.target.x ==
           movingEnemyStep.enemyGrunt.position.x
@@ -561,16 +548,20 @@ window.onload = async () => {
             movingEnemyStep.enemyGrunt.target = { x: 10, y: 200 };
             movingEnemyStep.enemyGrunt.side = "left";
           } else {
-            goRight();
+            movingEnemyStep.goRight();
           }
         }
-
-        if (onScreenEnemies.length === 0) {
-          movingEnemyStep.next = true;
-          engine.removeActor(enemyStep);
-        }
       });
-      movingEnemyStep.init = false;
+      movingEnemyStep.goRight = () => {
+        movingEnemyStep.enemyGrunt.target = {
+          x:
+            GLOBALS.virtualScreenSize.width -
+            movingEnemyStep.enemyGrunt.dimensions.width -
+            10,
+          y: 200,
+        };
+        movingEnemyStep.enemyGrunt.side = "right";
+      };
 
       const winStep = new LevelStep((delta) => {
         engine.removeActor(winStep);
@@ -579,7 +570,6 @@ window.onload = async () => {
 
       const spaceGameScript = new LevelScript([
         new WaitStep(0.5),
-        asteroidStep,
         enemyStep,
         new WaitStep(0.25),
         enemyStep2,
