@@ -581,7 +581,7 @@ window.onload = async () => {
             { x: GLOBALS.virtualScreenSize.width - 110, y: 200 },
           ]
         );
-        movingEnemyStep2.enemyGrunt3 =new PatrolingGrunt(-100, 50, [
+        movingEnemyStep2.enemyGrunt3 = new PatrolingGrunt(-100, 50, [
           { x: GLOBALS.virtualScreenSize.width - 110, y: 50 },
           { x: 10, y: 50 },
         ]);
@@ -593,22 +593,74 @@ window.onload = async () => {
         engine.addActor(movingEnemyStep2.enemyGrunt3);
       });
 
+      const sineEnemyPattern = new EnemyStep(() => {
+        const widthEighth = (GLOBALS.virtualScreenSize.width - 110) / 8;
+        const ySway = (n,yEpsilon) => {
+          return Math.sin(n*Math.PI/4) * yEpsilon;
+        }
+
+        sineEnemyPattern.enemyGrunt1 = new PatrolingGrunt(-100, 400, [
+          { x: 10, y: 400 },
+          { x: widthEighth, y: 400 + ySway(1,100) },
+          { x: 2*widthEighth, y: 400 + ySway(2,100)},
+          { x: 3*widthEighth, y: 400 + ySway(3,100)},
+          { x: 4*widthEighth, y: 400 + ySway(4,100)},
+          { x: 5*widthEighth, y: 400 + ySway(5,100)},
+          { x: 6*widthEighth, y: 400 + ySway(6,100)},
+          { x: 7*widthEighth, y: 400 + ySway(7,100)},
+          { x: 8*widthEighth, y: 400 + ySway(8,100)},
+          { x: 7*widthEighth, y: 400 + ySway(9,100)},
+          { x: 6*widthEighth, y: 400 + ySway(10,100)},
+          { x: 5*widthEighth, y: 400 + ySway(11,100)},
+          { x: 4*widthEighth, y: 400 + ySway(12,100)},
+          { x: 3*widthEighth, y: 400 + ySway(13,100)},
+          { x: 2*widthEighth, y: 400 + ySway(14,100)},
+          { x: 1*widthEighth, y: 400 + ySway(15,100)},
+        ]);
+
+        sineEnemyPattern.enemyGrunt2 = new PatrolingGrunt(GLOBALS.virtualScreenSize+100, 150, [
+          { x: 8*widthEighth, y: 150 },
+          { x: 7*widthEighth, y: 150 - ySway(3,100) },
+          { x: 6*widthEighth, y: 150 - ySway(4,100)},
+          { x: 5*widthEighth, y: 150 - ySway(5,100)},
+          { x: 4*widthEighth, y: 150 - ySway(6,100)},
+          { x: 3*widthEighth, y: 150 - ySway(7,100)},
+          { x: 2*widthEighth, y: 150 - ySway(8,100)},
+          { x: 1*widthEighth, y: 150 - ySway(9,100)},
+          { x: 10, y: 150 + ySway(10,100)},
+          { x: 1*widthEighth, y: 150 - ySway(11,100)},
+          { x: 2*widthEighth, y: 150 - ySway(12,100)},
+          { x: 3*widthEighth, y: 150 - ySway(13,100)},
+          { x: 4*widthEighth, y: 150 - ySway(14,100)},
+          { x: 5*widthEighth, y: 150 - ySway(15,100)},
+          { x: 6*widthEighth, y: 150 - ySway(16,100)},
+          { x: 7*widthEighth, y: 150 - ySway(17,100)},
+        ]);
+
+        onScreenEnemies.push(sineEnemyPattern.enemyGrunt1);
+        onScreenEnemies.push(sineEnemyPattern.enemyGrunt2);
+        engine.addActor(sineEnemyPattern.enemyGrunt1);
+        engine.addActor(sineEnemyPattern.enemyGrunt2);
+      });
+
       const winStep = new LevelStep((delta) => {
         engine.removeActor(winStep);
         engine.loadScene(winScene);
       });
 
       const spaceGameScript = new LevelScript([
-        /*new WaitStep(0.5),
+        new WaitStep(0.5),
         enemyStep,
         new WaitStep(0.25),
         enemyStep2,
         new WaitStep(0.25),
         enemyStep3,
-        asteroidStep2,*/
+        asteroidStep2,
         movingEnemyStep,
         new WaitStep(0.25),
         movingEnemyStep2,
+        new WaitStep(0.25),
+        sineEnemyPattern,
         new WaitStep(0.5),
         winStep,
       ]);
