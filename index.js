@@ -596,47 +596,51 @@ window.onload = async () => {
 
       const sineEnemyPattern = new EnemyStep(() => {
         const widthEighth = (GLOBALS.virtualScreenSize.width - 110) / 8;
-        const ySway = (n,yEpsilon) => {
-          return Math.sin(n*Math.PI/4) * yEpsilon;
-        }
+        const ySway = (n, yEpsilon) => {
+          return Math.sin((n * Math.PI) / 4) * yEpsilon;
+        };
 
         sineEnemyPattern.enemyGrunt1 = new PatrolingGrunt(-100, 400, [
           { x: 10, y: 400 },
-          { x: widthEighth, y: 400 + ySway(1,100) },
-          { x: 2*widthEighth, y: 400 + ySway(2,100)},
-          { x: 3*widthEighth, y: 400 + ySway(3,100)},
-          { x: 4*widthEighth, y: 400 + ySway(4,100)},
-          { x: 5*widthEighth, y: 400 + ySway(5,100)},
-          { x: 6*widthEighth, y: 400 + ySway(6,100)},
-          { x: 7*widthEighth, y: 400 + ySway(7,100)},
-          { x: 8*widthEighth, y: 400 + ySway(8,100)},
-          { x: 7*widthEighth, y: 400 + ySway(9,100)},
-          { x: 6*widthEighth, y: 400 + ySway(10,100)},
-          { x: 5*widthEighth, y: 400 + ySway(11,100)},
-          { x: 4*widthEighth, y: 400 + ySway(12,100)},
-          { x: 3*widthEighth, y: 400 + ySway(13,100)},
-          { x: 2*widthEighth, y: 400 + ySway(14,100)},
-          { x: 1*widthEighth, y: 400 + ySway(15,100)},
+          { x: widthEighth, y: 400 + ySway(1, 100) },
+          { x: 2 * widthEighth, y: 400 + ySway(2, 100) },
+          { x: 3 * widthEighth, y: 400 + ySway(3, 100) },
+          { x: 4 * widthEighth, y: 400 + ySway(4, 100) },
+          { x: 5 * widthEighth, y: 400 + ySway(5, 100) },
+          { x: 6 * widthEighth, y: 400 + ySway(6, 100) },
+          { x: 7 * widthEighth, y: 400 + ySway(7, 100) },
+          { x: 8 * widthEighth, y: 400 + ySway(8, 100) },
+          { x: 7 * widthEighth, y: 400 + ySway(9, 100) },
+          { x: 6 * widthEighth, y: 400 + ySway(10, 100) },
+          { x: 5 * widthEighth, y: 400 + ySway(11, 100) },
+          { x: 4 * widthEighth, y: 400 + ySway(12, 100) },
+          { x: 3 * widthEighth, y: 400 + ySway(13, 100) },
+          { x: 2 * widthEighth, y: 400 + ySway(14, 100) },
+          { x: 1 * widthEighth, y: 400 + ySway(15, 100) },
         ]);
 
-        sineEnemyPattern.enemyGrunt2 = new PatrolingGrunt(GLOBALS.virtualScreenSize+100, 150, [
-          { x: 8*widthEighth, y: 150 },
-          { x: 7*widthEighth, y: 150 - ySway(3,100) },
-          { x: 6*widthEighth, y: 150 - ySway(4,100)},
-          { x: 5*widthEighth, y: 150 - ySway(5,100)},
-          { x: 4*widthEighth, y: 150 - ySway(6,100)},
-          { x: 3*widthEighth, y: 150 - ySway(7,100)},
-          { x: 2*widthEighth, y: 150 - ySway(8,100)},
-          { x: 1*widthEighth, y: 150 - ySway(9,100)},
-          { x: 10, y: 150 + ySway(10,100)},
-          { x: 1*widthEighth, y: 150 - ySway(11,100)},
-          { x: 2*widthEighth, y: 150 - ySway(12,100)},
-          { x: 3*widthEighth, y: 150 - ySway(13,100)},
-          { x: 4*widthEighth, y: 150 - ySway(14,100)},
-          { x: 5*widthEighth, y: 150 - ySway(15,100)},
-          { x: 6*widthEighth, y: 150 - ySway(16,100)},
-          { x: 7*widthEighth, y: 150 - ySway(17,100)},
-        ]);
+        sineEnemyPattern.enemyGrunt2 = new PatrolingGrunt(
+          GLOBALS.virtualScreenSize + 100,
+          150,
+          [
+            { x: 8 * widthEighth, y: 150 },
+            { x: 7 * widthEighth, y: 150 - ySway(3, 100) },
+            { x: 6 * widthEighth, y: 150 - ySway(4, 100) },
+            { x: 5 * widthEighth, y: 150 - ySway(5, 100) },
+            { x: 4 * widthEighth, y: 150 - ySway(6, 100) },
+            { x: 3 * widthEighth, y: 150 - ySway(7, 100) },
+            { x: 2 * widthEighth, y: 150 - ySway(8, 100) },
+            { x: 1 * widthEighth, y: 150 - ySway(9, 100) },
+            { x: 10, y: 150 + ySway(10, 100) },
+            { x: 1 * widthEighth, y: 150 - ySway(11, 100) },
+            { x: 2 * widthEighth, y: 150 - ySway(12, 100) },
+            { x: 3 * widthEighth, y: 150 - ySway(13, 100) },
+            { x: 4 * widthEighth, y: 150 - ySway(14, 100) },
+            { x: 5 * widthEighth, y: 150 - ySway(15, 100) },
+            { x: 6 * widthEighth, y: 150 - ySway(16, 100) },
+            { x: 7 * widthEighth, y: 150 - ySway(17, 100) },
+          ]
+        );
 
         onScreenEnemies.push(sineEnemyPattern.enemyGrunt1);
         onScreenEnemies.push(sineEnemyPattern.enemyGrunt2);
