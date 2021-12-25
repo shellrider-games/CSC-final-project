@@ -363,7 +363,6 @@ window.onload = async () => {
     }
   }
 
-
   class SpaceGameScene extends Scene {
     playerShip;
     constructor() {
@@ -444,8 +443,6 @@ window.onload = async () => {
           this.asteroidGenerator = new AsteroidGenerator();
         }
       }
-
-      
 
       class EnemyStep extends LevelStep {
         init;
@@ -692,15 +689,12 @@ window.onload = async () => {
       playerShots = [];
       enemyShots = [];
     }
-
     postRenders() {
       super.postRenders();
     }
   }
 
   const spaceGameScene = new SpaceGameScene();
-
-  
 
   const startScene = new Scene();
   startScene.preUpdates = () => {
