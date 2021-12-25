@@ -51,6 +51,7 @@ window.onload = async () => {
   let asteroids = [];
   let playerShots = [];
   let enemyShots = [];
+  let onScreenEnemies = [];
   const asteroidSprite = await engine.requestSprite(
     "./assets/img/meteorGrey_big1.png"
   );
@@ -120,8 +121,6 @@ window.onload = async () => {
       }
     }
   }
-
-
 
   class PlayerShip extends StaticBody {
     speed;
@@ -321,6 +320,7 @@ window.onload = async () => {
       });
       if (this.hitpoints <= 0) {
         engine.audio.play("explosion");
+        onScreenEnemies.splice(onScreenEnemies.indexOf(this),1);
         engine.removeActor(this);
       }
     }
@@ -384,40 +384,104 @@ window.onload = async () => {
       });
       waitStep.timePassed = 0;
 
-      const asteroidStep = new LevelStep((delta) => {
-        asteroidStep.timePassed += delta;
-        if (!asteroidStep.init) {
-          engine.addActor(asteroidStep.asteroidGenerator);
-          asteroidStep.init = true;
-          asteroidStep.asteroidGeneratorRemoved = false;
+      class AsteroidStep extends LevelStep{
+        constructor(){
+          super((delta) => {
+            this.timePassed += delta;
+            if (!this.init) {
+              engine.addActor(this.asteroidGenerator);
+              this.init = true;
+              this.asteroidGeneratorRemoved = false;
+            }
+            if (
+              this.timePassed >= 5 &&
+              !this.asteroidGeneratorRemoved
+            ) {
+              engine.removeActor(this.asteroidGenerator);
+              this.asteroidGeneratorRemoved = true;
+            }
+            if (this.timePassed >= 8) {
+              this.next = true;
+              engine.removeActor(this);
+            }
+          });
+          this.init = false;
+          this.timePassed = 0;
+          this.asteroidGenerator = new AsteroidGenerator();
         }
-        if (
-          asteroidStep.timePassed >= 5 &&
-          !asteroidStep.asteroidGeneratorRemoved
-        ) {
-          engine.removeActor(asteroidStep.asteroidGenerator);
-          asteroidStep.asteroidGeneratorRemoved = true;
-        }
-        if (asteroidStep.timePassed >= 8) {
-          asteroidStep.next = true;
-          engine.removeActor(asteroidStep);
-        }
-      });
-      asteroidStep.init = false;
-      asteroidStep.timePassed = 0;
-      asteroidStep.asteroidGenerator = new AsteroidGenerator();
+      }
+
+      const asteroidStep = new AsteroidStep();
+      const asteroidStep2 = new AsteroidStep();
 
       const enemyStep = new LevelStep((delta) => {
-        const enemyGrunt = new EnemyGrunt(0, 0);
-        enemyGrunt.target = { x: 300, y: 200 };
-        engine.addActor(enemyGrunt);
-        engine.removeActor(enemyStep);
+        if(!enemyStep.init){
+          const enemyGrunt = new EnemyGrunt(0, 0);
+          enemyGrunt.target = { x: GLOBALS.virtualScreenSize.width/2 - enemyGrunt.dimensions.width/2, y: 200 };
+          onScreenEnemies.push(enemyGrunt);
+          engine.addActor(enemyGrunt);
+          enemyStep.init = true;
+        }
+        if(onScreenEnemies.length === 0){
+          enemyStep.next = true;
+          engine.removeActor(enemyStep);
+        }  
       });
+      enemyStep.init = false;
+
+
+      const enemyStep2 = new LevelStep((delta) => {
+        if(!enemyStep2.init){
+          const enemyGrunt = new EnemyGrunt(0, 0);
+          enemyGrunt.target = { x: GLOBALS.virtualScreenSize.width/2 - enemyGrunt.dimensions.width/2 - 100, y: 200 };
+          const enemyGrunt2 = new EnemyGrunt(GLOBALS.virtualScreenSize.width - enemyGrunt.dimensions.width, 0);
+          enemyGrunt2.target = { x: GLOBALS.virtualScreenSize.width/2 - enemyGrunt2.dimensions.width/2 + 100, y: 200 };
+          onScreenEnemies.push(enemyGrunt);
+          engine.addActor(enemyGrunt);
+          onScreenEnemies.push(enemyGrunt2);
+          engine.addActor(enemyGrunt2);
+          enemyStep2.init = true;
+        }
+        if(onScreenEnemies.length === 0){
+          enemyStep2.next = true;
+          engine.removeActor(enemyStep);
+        } 
+      });
+      enemyStep2.init = false;
+      
+      const enemyStep3 = new LevelStep((delta) => {
+        if(!enemyStep3.init){
+          const enemyGrunt = new EnemyGrunt(0, 100);
+          enemyGrunt.target = { x: GLOBALS.virtualScreenSize.width/2 - enemyGrunt.dimensions.width/2 - 100, y: 200 };
+          const enemyGrunt2 = new EnemyGrunt(GLOBALS.virtualScreenSize.width - enemyGrunt.dimensions.width, 100);
+          enemyGrunt2.target = { x: GLOBALS.virtualScreenSize.width/2 - enemyGrunt2.dimensions.width/2 + 100, y: 200 };
+          const enemyGrunt3 = new EnemyGrunt(0, 0);
+          enemyGrunt3.target = { x: GLOBALS.virtualScreenSize.width/2 - enemyGrunt.dimensions.width/2 - 250, y: 100 };
+          const enemyGrunt4 = new EnemyGrunt(GLOBALS.virtualScreenSize.width - enemyGrunt.dimensions.width, 0);
+          enemyGrunt4.target = { x: GLOBALS.virtualScreenSize.width/2 - enemyGrunt2.dimensions.width/2 + 250, y: 100 };
+          onScreenEnemies.push(enemyGrunt);
+          engine.addActor(enemyGrunt);
+          onScreenEnemies.push(enemyGrunt2);
+          engine.addActor(enemyGrunt2);
+          onScreenEnemies.push(enemyGrunt3);
+          engine.addActor(enemyGrunt3);
+          onScreenEnemies.push(enemyGrunt4);
+          engine.addActor(enemyGrunt4);
+          enemyStep3.init = true;
+        }
+        if(onScreenEnemies.length === 0){
+          enemyStep3.next = true;
+        } 
+      });
+      enemyStep3.init = false;
 
       const spaceGameScript = new LevelScript([
         waitStep,
         asteroidStep,
         enemyStep,
+        enemyStep2,
+        enemyStep3,
+        asteroidStep2,
       ]);
       this.actors = [];
       this.playerShip = new PlayerShip();
