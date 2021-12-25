@@ -538,7 +538,6 @@ window.onload = async () => {
           movingEnemyStep.goRight();
           onScreenEnemies.push(movingEnemyStep.enemyGrunt);
           engine.addActor(movingEnemyStep.enemyGrunt);
-          movingEnemyStep.init = true;
       },(delta) => {
         if (
           movingEnemyStep.enemyGrunt.target.x ==
@@ -563,6 +562,39 @@ window.onload = async () => {
         movingEnemyStep.enemyGrunt.side = "right";
       };
 
+      const movingEnemyStep2 = new EnemyStep(() => {
+        movingEnemyStep2.enemies = [];
+        movingEnemyStep2.enemyGrunt1 = new EnemyGrunt(-100, 350);
+        movingEnemyStep2.enemyGrunt1.target = { x: GLOBALS.virtualScreenSize.width-movingEnemyStep2.enemyGrunt1.dimensions.width-10, y: 300};
+        movingEnemyStep2.enemyGrunt1.otherPos = { x: 10, y: 350};
+        movingEnemyStep2.enemyGrunt2 = new EnemyGrunt(GLOBALS.virtualScreenSize.width+100,200);
+        movingEnemyStep2.enemyGrunt2.target = { x: 10, y: 200};
+        movingEnemyStep2.enemyGrunt2.otherPos = { x: GLOBALS.virtualScreenSize.width-movingEnemyStep2.enemyGrunt2.dimensions.width-10, y: 200};
+        movingEnemyStep2.enemyGrunt3 = new EnemyGrunt(-50, 50);
+        movingEnemyStep2.enemyGrunt3.target = { x: 10, y: 50};
+        movingEnemyStep2.enemyGrunt3.otherPos = { x: GLOBALS.virtualScreenSize.width-movingEnemyStep2.enemyGrunt2.dimensions.width-10, y: 50};
+
+        movingEnemyStep2.enemies.push(movingEnemyStep2.enemyGrunt1);
+        movingEnemyStep2.enemies.push(movingEnemyStep2.enemyGrunt2);
+        movingEnemyStep2.enemies.push(movingEnemyStep2.enemyGrunt3);
+
+        onScreenEnemies.push(movingEnemyStep2.enemyGrunt1);
+        onScreenEnemies.push(movingEnemyStep2.enemyGrunt2);
+        onScreenEnemies.push(movingEnemyStep2.enemyGrunt3);
+        engine.addActor(movingEnemyStep2.enemyGrunt1);
+        engine.addActor(movingEnemyStep2.enemyGrunt2);
+        engine.addActor(movingEnemyStep2.enemyGrunt3);
+
+      }, (delta) => {
+        movingEnemyStep2.enemies.forEach((enemy) => {
+          if (enemy.position.x === enemy.target.x && enemy.position.y === enemy.target.y){
+            const temporaryVector = enemy.target;
+            enemy.target = enemy.otherPos;
+            enemy.otherPos = temporaryVector;
+          }
+        });
+      });
+
       const winStep = new LevelStep((delta) => {
         engine.removeActor(winStep);
         engine.loadScene(winScene);
@@ -577,6 +609,8 @@ window.onload = async () => {
         enemyStep3,
         asteroidStep2,
         movingEnemyStep,
+        new WaitStep(0.25),
+        movingEnemyStep2,
         new WaitStep(0.5),
         winStep,
       ]);
