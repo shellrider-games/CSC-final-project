@@ -433,6 +433,7 @@ window.onload = async () => {
         }
       }
 
+      const asteroidStep = new AsteroidStep();
       const asteroidStep2 = new AsteroidStep();
 
       class EnemyStep extends LevelStep {
@@ -655,12 +656,13 @@ window.onload = async () => {
         enemyStep2,
         new WaitStep(0.25),
         enemyStep3,
-        asteroidStep2,
+        asteroidStep,
         movingEnemyStep,
         new WaitStep(0.25),
         movingEnemyStep2,
         new WaitStep(0.25),
         sineEnemyPattern,
+        asteroidStep2,
         new WaitStep(0.5),
         winStep,
       ]);
