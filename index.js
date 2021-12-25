@@ -57,6 +57,8 @@ window.onload = async () => {
     "explosion"
   );
   await engine.audio.loadSound("./assets/audio/effects/laser.wav", "laser");
+  await engine.audio.loadSound("./assets/audio/effects/hit.wav", "hit");
+  await engine.audio.loadSound("./assets/audio/effects/hit_asteroid.wav", "hit_asteroid");
   let asteroids = [];
   let playerShots = [];
   let enemyShots = [];
@@ -323,6 +325,7 @@ window.onload = async () => {
       playerShots.forEach((playerShot) => {
         if (engine.physics.collide(this, playerShot)) {
           this.hitpoints -= 1;
+          engine.audio.play("hit");
           playerShots.splice(playerShots.indexOf(playerShot), 1);
           engine.removeActor(playerShot);
         }
@@ -355,6 +358,7 @@ window.onload = async () => {
         playerShots.forEach((shot) => {
           if (engine.physics.collide(asteroid, shot)) {
             playerShots.splice(playerShots.indexOf(shot), 1);
+            engine.audio.play("hit_asteroid");
             engine.removeActor(shot);
           }
         });
@@ -475,7 +479,7 @@ window.onload = async () => {
 
       const enemyStep3 = new LevelStep((delta) => {
         if (!enemyStep3.init) {
-          const enemyGrunt = new EnemyGrunt(-100, 100);
+          const enemyGrunt = new EnemyGrunt(-100, 150);
           enemyGrunt.target = {
             x:
               GLOBALS.virtualScreenSize.width / 2 -
@@ -485,7 +489,7 @@ window.onload = async () => {
           };
           const enemyGrunt2 = new EnemyGrunt(
             GLOBALS.virtualScreenSize.width,
-            100
+            150
           );
           enemyGrunt2.target = {
             x:
