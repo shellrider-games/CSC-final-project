@@ -4,6 +4,7 @@ import { randomNumberBetween } from "./toolBox.js";
 import StaticBody from "./staticBody.js";
 import Actor from "./actor.js";
 import Scene from "./scene.js";
+import ShellriderButton from "./shellriderUIKit/button.js";
 
 window.toggleDebug = function () {
   GLOBALS.debug = !GLOBALS.debug;
@@ -696,7 +697,9 @@ window.onload = async () => {
 
   const spaceGameScene = new SpaceGameScene();
 
-  const startScene = new Scene();
+
+  const testButton = new ShellriderButton(100,100,100,100);
+  const startScene = new Scene([testButton]);
   startScene.preUpdates = () => {
     canvasAutoAdjust();
   };
