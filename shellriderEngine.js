@@ -123,9 +123,14 @@ class ShellriderEngine {
     };
   }
 
+  async initUIKit(){
+    GLOBALS.defaultButtonImage = await this.requestSprite("./engine_assets/img/grey_button10.png");
+  }
+
   init() {
     this.initMouse();
     this.initTouch();
+    this.initUIKit();
   }
 
   loadScene(scene) {
