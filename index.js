@@ -698,7 +698,7 @@ window.onload = async () => {
   const spaceGameScene = new SpaceGameScene();
 
 
-  const testButton = new ShellriderButton(100,100,160,80);
+  const testButton = new ShellriderButton(220,100,260,50);
   const startScene = new Scene([testButton]);
   startScene.preUpdates = () => {
     canvasAutoAdjust();
