@@ -156,8 +156,6 @@ class NineSliceImage{
       this.sliceSprite.corners[3].x,
       this.sliceSprite.corners[3].y
     );
-
-    GLOBALS.ctx.resetTransform();
   }
 }
 
