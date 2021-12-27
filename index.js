@@ -698,29 +698,16 @@ window.onload = async () => {
   const spaceGameScene = new SpaceGameScene();
 
 
-  const testButton = new ShellriderButton(220,100,130,100,"START");
+  const testButton = new ShellriderButton(GLOBALS.virtualScreenSize.width/2-130,GLOBALS.virtualScreenSize.height/2-30,260,60,"START GAME");
+  testButton.onRelease = () => {
+    engine.loadScene(spaceGameScene);
+  }
   const startScene = new Scene([testButton]);
   startScene.preUpdates = () => {
     canvasAutoAdjust();
   };
-  startScene.postRenders = () => {
-    GLOBALS.ctx.fillStyle = "#efefef";
-    GLOBALS.ctx.font = `42px Arial`;
-    const txt = "Click/Touch to Start";
-    GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
-    GLOBALS.ctx.fillText(
-      txt,
-      GLOBALS.virtualScreenSize.width / 2 -
-        GLOBALS.ctx.measureText(txt).width / 2,
-      GLOBALS.virtualScreenSize.height / 2
-    );
-    GLOBALS.ctx.resetTransform();
-  };
-  startScene.postUpdates = () => {
-    if (GLOBALS.mouse.down || GLOBALS.touch.active) {
-      engine.loadScene(spaceGameScene);
-    }
-  };
+  startScene.postRenders = () => {};
+  startScene.postUpdates = () => {};
   startScene.onSceneEntry = () => {};
 
   startScene.preRenders = () => {};

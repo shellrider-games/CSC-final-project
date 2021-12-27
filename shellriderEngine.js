@@ -125,6 +125,7 @@ class ShellriderEngine {
 
   async initUIKit(){
     GLOBALS.defaultButtonImage = await this.requestSprite("./engine_assets/img/grey_button10.png");
+    GLOBALS.defaultButtonPressedImage = await this.requestSprite("./engine_assets/img/grey_button11.png");
   }
 
   init() {
