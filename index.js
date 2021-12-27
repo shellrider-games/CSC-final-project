@@ -698,7 +698,7 @@ window.onload = async () => {
   const spaceGameScene = new SpaceGameScene();
 
 
-  const testButton = new ShellriderButton(GLOBALS.virtualScreenSize.width/2-130,GLOBALS.virtualScreenSize.height/2-30,260,60,"START GAME");
+  const testButton = new ShellriderButton(GLOBALS.virtualScreenSize.width/2-180,GLOBALS.virtualScreenSize.height/2-40,360,80,"START GAME");
   testButton.onRelease = () => {
     engine.loadScene(spaceGameScene);
   }

@@ -60,10 +60,9 @@ class ShellriderButton extends Actor {
         break;
     }
 
-    GLOBALS.ctx.font = "24px Arial";
-    GLOBALS.ctx.strokeStyle = "black";
-    GLOBALS.ctx.fillStyle = "black";
-    GLOBALS.ctx.lineWidth = 2;
+    GLOBALS.ctx.font = "bold 42px Arial";
+    GLOBALS.ctx.fillStyle = "161715";
+
     const textMeasure = GLOBALS.ctx.measureText(this.text);
     GLOBALS.ctx.fillText(
       this.text,
@@ -97,9 +96,9 @@ class ShellriderButton extends Actor {
         GLOBALS.mouse.x <= bb.x + bb.width &&
         bb.y <= GLOBALS.mouse.y &&
         GLOBALS.mouse.y <= bb.y + bb.height) ||
-      (bb.x <= GLOBALS.mouse.x &&
+      (bb.x <= GLOBALS.touch.x &&
         GLOBALS.touch.x <= bb.x + bb.width &&
-        bb.y <= GLOBALS.mouse.y &&
+        bb.y <= GLOBALS.touch.y &&
         GLOBALS.touch.y <= bb.y + bb.height &&
         GLOBALS.touch.active)
     ) {
