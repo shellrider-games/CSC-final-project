@@ -413,7 +413,6 @@ window.onload = async () => {
       super.onSceneEntry();
       class WaitStep extends LevelStep {
         timePassed;
-
         constructor(time) {
           super((delta) => {
             this.timePassed += delta;
@@ -690,34 +689,36 @@ window.onload = async () => {
       this.playerShip = new PlayerShip();
       this.actors.push(this.playerShip);
       this.actors.push(spaceGameScript);
-      asteroids = [];
-      playerShots = [];
-      enemyShots = [];
     }
     postRenders() {
       super.postRenders();
     }
   }
-
   const spaceGameScene = new SpaceGameScene();
 
-
-  const startButton = new ShellriderButton(GLOBALS.virtualScreenSize.width/2-180,GLOBALS.virtualScreenSize.height/2-40,360,80,"START GAME");
+  const startButton = new ShellriderButton(
+    GLOBALS.virtualScreenSize.width / 2 - 180,
+    GLOBALS.virtualScreenSize.height / 2 - 40,
+    360,
+    80,
+    "START GAME"
+  );
   startButton.onRelease = () => {
     engine.loadScene(spaceGameScene);
-  }
+  };
 
-  const startScene = new Scene([startButton]);
+  const partManager = new ParticleManager(engine);
+  partManager.addParticle(
+    new Particle(250, 250, 20, [255, 120, 0], 0.1, { x: 0, y: 1 }, 500)
+  );
+
+  const startScene = new Scene([startButton, partManager]);
   startScene.preUpdates = () => {
     canvasAutoAdjust();
   };
   startScene.postRenders = () => {};
   startScene.postUpdates = () => {};
-  startScene.onSceneEntry = () => {
-    const partManager = new ParticleManager(engine);
-    engine.addActor(partManager);
-    partManager.addParticle(new Particle(250,250,20,[255,120,0],0.1,{x:0,y:1},500));
-  };
+  startScene.onSceneEntry = () => {};
 
   startScene.preRenders = () => {};
 
@@ -725,7 +726,7 @@ window.onload = async () => {
     text;
     currentlyTouched;
 
-    constructor(text,actors = []) {
+    constructor(text, actors = []) {
       super(actors);
       this.text = text;
     }
@@ -746,20 +747,23 @@ window.onload = async () => {
       );
       GLOBALS.ctx.resetTransform();
     }
-
     onSceneEntry() {}
-
     postUpdates() {}
   }
 
-
-  const restartButton = new ShellriderButton(GLOBALS.virtualScreenSize.width/2-180,GLOBALS.virtualScreenSize.height/2-40,360,80,"RESTART");
+  const restartButton = new ShellriderButton(
+    GLOBALS.virtualScreenSize.width / 2 - 180,
+    GLOBALS.virtualScreenSize.height / 2 - 40,
+    360,
+    80,
+    "RESTART"
+  );
   restartButton.onRelease = () => {
     engine.loadScene(spaceGameScene);
-  }
+  };
 
-  const gameOverScene = new EndState("GAME OVER!",[restartButton]);
-  const winScene = new EndState("CONGRATULATIONS YOU WON!",[restartButton]);
+  const gameOverScene = new EndState("GAME OVER!", [restartButton]);
+  const winScene = new EndState("CONGRATULATIONS YOU WON!", [restartButton]);
 
   engine.loadScene(startScene);
 };
