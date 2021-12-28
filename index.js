@@ -405,6 +405,9 @@ window.onload = async () => {
     }
 
     onSceneEntry() {
+      onScreenEnemies = [];
+      playerShots = [];
+      asteroids = [];
       super.onSceneEntry();
       class WaitStep extends LevelStep {
         timePassed;
@@ -462,7 +465,6 @@ window.onload = async () => {
           this.init = false;
         }
       }
-
       const asteroidStep = new AsteroidStep();
       const asteroidStep2 = new AsteroidStep();
 
@@ -698,11 +700,11 @@ window.onload = async () => {
   const spaceGameScene = new SpaceGameScene();
 
 
-  const testButton = new ShellriderButton(GLOBALS.virtualScreenSize.width/2-180,GLOBALS.virtualScreenSize.height/2-40,360,80,"START GAME");
-  testButton.onRelease = () => {
+  const startButton = new ShellriderButton(GLOBALS.virtualScreenSize.width/2-180,GLOBALS.virtualScreenSize.height/2-40,360,80,"START GAME");
+  startButton.onRelease = () => {
     engine.loadScene(spaceGameScene);
   }
-  const startScene = new Scene([testButton]);
+  const startScene = new Scene([startButton]);
   startScene.preUpdates = () => {
     canvasAutoAdjust();
   };
@@ -716,8 +718,8 @@ window.onload = async () => {
     text;
     currentlyTouched;
 
-    constructor(text) {
-      super();
+    constructor(text,actors = []) {
+      super(actors);
       this.text = text;
     }
 
@@ -733,36 +735,24 @@ window.onload = async () => {
         this.text,
         GLOBALS.virtualScreenSize.width / 2 -
           GLOBALS.ctx.measureText(this.text).width / 2,
-        GLOBALS.virtualScreenSize.height / 2 - 24
-      );
-      const txt = "Touch/Click to start again";
-      GLOBALS.ctx.fillText(
-        txt,
-        GLOBALS.virtualScreenSize.width / 2 -
-          GLOBALS.ctx.measureText(txt).width / 2,
-        GLOBALS.virtualScreenSize.height / 2 + 24
+        GLOBALS.virtualScreenSize.height / 2 - 100
       );
       GLOBALS.ctx.resetTransform();
     }
 
-    onSceneEntry() {
-      this.currentlyTouched = GLOBALS.touch.active || GLOBALS.mouse.justClicked;
-    }
+    onSceneEntry() {}
 
-    postUpdates() {
-      if (this.currentlyTouched) {
-        this.currentlyTouched =
-          GLOBALS.touch.active || GLOBALS.mouse.justClicked;
-      } else {
-        if (GLOBALS.touch.active || GLOBALS.mouse.justClicked) {
-          engine.loadScene(spaceGameScene);
-        }
-      }
-    }
+    postUpdates() {}
   }
 
-  const gameOverScene = new EndState("GAME OVER!");
-  const winScene = new EndState("CONGRATULATIONS YOU WON!");
+
+  const restartButton = new ShellriderButton(GLOBALS.virtualScreenSize.width/2-180,GLOBALS.virtualScreenSize.height/2-40,360,80,"RESTART");
+  restartButton.onRelease = () => {
+    engine.loadScene(spaceGameScene);
+  }
+
+  const gameOverScene = new EndState("GAME OVER!",[restartButton]);
+  const winScene = new EndState("CONGRATULATIONS YOU WON!",[restartButton]);
 
   engine.loadScene(startScene);
 };

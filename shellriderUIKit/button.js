@@ -76,17 +76,11 @@ class ShellriderButton extends Actor {
     GLOBALS.ctx.resetTransform();
   }
 
-  onPressed() {
-    console.log("pressed");
-  }
+  onPressed() {}
 
-  onRelease() {
-    console.log("released");
-  }
+  onRelease() {}
 
-  onReject() {
-    console.log("rejected");
-  }
+  onReject() {}
 
   update(delta) {
     const bb = this.getBoundingBox();
