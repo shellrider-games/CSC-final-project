@@ -139,8 +139,8 @@ class ShellriderEngine {
     if (scene instanceof Scene) {
       GLOBALS.pause = true;
       this.currentScene = sceneCopy;
-      sceneCopy.onSceneEntry();
       this.actors = sceneCopy.actors;
+      sceneCopy.onSceneEntry();
       this.run();
     }
   }

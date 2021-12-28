@@ -5,6 +5,8 @@ import StaticBody from "./staticBody.js";
 import Actor from "./actor.js";
 import Scene from "./scene.js";
 import ShellriderButton from "./shellriderUIKit/button.js";
+import Particle from "./particle.js";
+import ParticleManager from "./particleManager.js";
 
 window.toggleDebug = function () {
   GLOBALS.debug = !GLOBALS.debug;
@@ -704,13 +706,18 @@ window.onload = async () => {
   startButton.onRelease = () => {
     engine.loadScene(spaceGameScene);
   }
+
   const startScene = new Scene([startButton]);
   startScene.preUpdates = () => {
     canvasAutoAdjust();
   };
   startScene.postRenders = () => {};
   startScene.postUpdates = () => {};
-  startScene.onSceneEntry = () => {};
+  startScene.onSceneEntry = () => {
+    const partManager = new ParticleManager(engine);
+    engine.addActor(partManager);
+    partManager.addParticle(new Particle(250,250,20,[255,120,0],0.1,{x:0,y:1},500));
+  };
 
   startScene.preRenders = () => {};
 
