@@ -407,6 +407,7 @@ window.onload = async () => {
     }
 
     onSceneEntry() {
+      this.actors = [];
       onScreenEnemies = [];
       playerShots = [];
       asteroids = [];
@@ -424,7 +425,6 @@ window.onload = async () => {
           this.timePassed = 0;
         }
       }
-
       class AsteroidStep extends LevelStep {
         constructor() {
           super((delta) => {
@@ -448,7 +448,6 @@ window.onload = async () => {
           this.asteroidGenerator = new AsteroidGenerator();
         }
       }
-
       class EnemyStep extends LevelStep {
         init;
         constructor(init = () => {}, func = (delta) => {}) {
@@ -468,7 +467,6 @@ window.onload = async () => {
       }
       const asteroidStep = new AsteroidStep();
       const asteroidStep2 = new AsteroidStep();
-
       const enemyStep = new EnemyStep(() => {
         const enemyGrunt = new EnemyGrunt(0, 0);
         enemyGrunt.target = {
@@ -479,8 +477,7 @@ window.onload = async () => {
         };
         onScreenEnemies.push(enemyGrunt);
         engine.addActor(enemyGrunt);
-      });
-
+      })
       const enemyStep2 = new EnemyStep(() => {
         const enemyGrunt = new EnemyGrunt(-100, 0);
         enemyGrunt.target = {
@@ -503,7 +500,6 @@ window.onload = async () => {
         onScreenEnemies.push(enemyGrunt2);
         engine.addActor(enemyGrunt2);
       });
-
       const enemyStep3 = new EnemyStep(() => {
         const enemyGrunt = new EnemyGrunt(-100, 150);
         enemyGrunt.target = {
@@ -685,10 +681,12 @@ window.onload = async () => {
         new WaitStep(0.5),
         winStep,
       ]);
-      this.actors = [];
+
       this.playerShip = new PlayerShip();
       this.actors.push(this.playerShip);
       this.actors.push(spaceGameScript);
+      engine.actors = this.actors;
+      console.log(engine.actors);
     }
     postRenders() {
       super.postRenders();
@@ -707,18 +705,18 @@ window.onload = async () => {
     engine.loadScene(spaceGameScene);
   };
 
-  const partManager = new ParticleManager(engine);
-  partManager.addParticle(
-    new Particle(250, 250, 20, [255, 120, 0], 0.1, { x: 0, y: 1 }, 500)
-  );
-
-  const startScene = new Scene([startButton, partManager]);
+  const startScene = new Scene([startButton]);
   startScene.preUpdates = () => {
     canvasAutoAdjust();
   };
   startScene.postRenders = () => {};
   startScene.postUpdates = () => {};
-  startScene.onSceneEntry = () => {};
+  startScene.onSceneEntry = () => {
+    const partManager = new ParticleManager(engine);
+    partManager.addParticle(
+      new Particle(250, 250, 20, [255, 120, 0], 0.1, { x: 0, y: 1 }, 500)
+    );
+  };
 
   startScene.preRenders = () => {};
 
