@@ -198,8 +198,18 @@ window.onload = async () => {
       this.shield = true;
       this.nextShield = 0;
       this.hitpoints = 1;
-      this.fireEngine1 = new FireGenerator(this.position.x+this.dimensions.width/2-25,this.position.y+this.dimensions.height-5,engine,{x: 0, y: 1});
-      this.fireEngine2 = new FireGenerator(this.position.x+this.dimensions.width/2+25,this.position.y+this.dimensions.height-5,engine,{x: 0, y: 1});
+      this.fireEngine1 = new FireGenerator(
+        this.position.x + this.dimensions.width / 2 - 25,
+        this.position.y + this.dimensions.height - 5,
+        engine,
+        { x: 0, y: 1 }
+      );
+      this.fireEngine2 = new FireGenerator(
+        this.position.x + this.dimensions.width / 2 + 25,
+        this.position.y + this.dimensions.height - 5,
+        engine,
+        { x: 0, y: 1 }
+      );
     }
 
     getBoundingBox() {
@@ -262,16 +272,18 @@ window.onload = async () => {
       if (!this.shield && this.nextShield <= 0) {
         this.shield = true;
       }
-      this.fireEngine1.position.x = this.position.x + this.dimensions.width/2 -25;
-      this.fireEngine1.position.y = this.position.y + this.dimensions.height-5;
-      
-      
-      this.fireEngine2.position.x = this.position.x + this.dimensions.width/2 + 25;
-      this.fireEngine2.position.y = this.position.y + this.dimensions.height-5;
+      this.fireEngine1.position.x =
+        this.position.x + this.dimensions.width / 2 - 25;
+      this.fireEngine1.position.y =
+        this.position.y + this.dimensions.height - 5;
+
+      this.fireEngine2.position.x =
+        this.position.x + this.dimensions.width / 2 + 25;
+      this.fireEngine2.position.y =
+        this.position.y + this.dimensions.height - 5;
 
       this.fireEngine1.update(delta);
       this.fireEngine2.update(delta);
-
     }
     render() {
       super.render();
@@ -328,7 +340,11 @@ window.onload = async () => {
       this.target = { x: x, y: y };
       this.shotDelay = 1;
       this.hitpoints = hitpoints;
-      this.fireEngine = new FireGenerator(this.position.x+this.dimensions.width/2,this.position.y+5,engine);
+      this.fireEngine = new FireGenerator(
+        this.position.x + this.dimensions.width / 2,
+        this.position.y + 5,
+        engine
+      );
     }
     update(delta) {
       this.shotDelay = Math.max(0, this.shotDelay - delta);
@@ -367,8 +383,8 @@ window.onload = async () => {
           this.position.y = this.target.y;
         }
       }
-      this.fireEngine.position.x = this.position.x+this.dimensions.width/2;
-      this.fireEngine.position.y = this.position.y+5;
+      this.fireEngine.position.x = this.position.x + this.dimensions.width / 2;
+      this.fireEngine.position.y = this.position.y + 5;
 
       this.fireEngine.update(delta);
 

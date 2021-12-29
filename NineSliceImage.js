@@ -1,6 +1,6 @@
 import { GLOBALS } from "./shellriderEngineGlobals.js";
 
-class NineSliceImage{
+class NineSliceImage {
   sliceSprite;
   dimensions;
 
@@ -22,7 +22,6 @@ class NineSliceImage{
   }
 
   render() {
-
     //top left
     GLOBALS.ctx.drawImage(
       this.sliceSprite.sprite.image,
