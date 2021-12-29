@@ -8,6 +8,8 @@ import ShellriderButton from "./shellriderUIKit/button.js";
 import Particle from "./particle.js";
 import ParticleManager from "./particleManager.js";
 import FireGenerator from "./fireGenerator.js";
+import ScreenShaker from "./screenShaker.js";
+import Vector2 from "./shellriderMath/vector2.js";
 
 window.toggleDebug = function () {
   GLOBALS.debug = !GLOBALS.debug;
@@ -392,12 +394,18 @@ window.onload = async () => {
       playerShots.forEach((playerShot) => {
         if (engine.physics.collide(this, playerShot)) {
           this.hitpoints -= 1;
+          let shakeVector = new Vector2(1, 1);
+          shakeVector = shakeVector.rotate(Math.random() * Math.PI * 2);
+          engine.screenShaker.putAtPositon(shakeVector.x, shakeVector.y);
           engine.audio.play("hit");
           playerShots.splice(playerShots.indexOf(playerShot), 1);
           engine.removeActor(playerShot);
         }
       });
       if (this.hitpoints <= 0) {
+        let shakeVector = new Vector2(10, 10);
+        shakeVector = shakeVector.rotate(Math.random() * Math.PI * 2);
+        engine.screenShaker.putAtPositon(shakeVector.x, shakeVector.y);
         engine.audio.play("explosion");
         onScreenEnemies.splice(onScreenEnemies.indexOf(this), 1);
         engine.removeActor(this);
@@ -414,13 +422,16 @@ window.onload = async () => {
       canvasAutoAdjust();
     }
 
-    postUpdates() {
+    postUpdates(delta) {
       asteroids.forEach((asteroid) => {
         if (engine.physics.collide(asteroid, this.playerShip)) {
           engine.audio.play("explosion");
           asteroids.splice(asteroids.indexOf(asteroid), 1);
           engine.removeActor(asteroid);
           this.playerShip.damage();
+          let shakeVector = new Vector2(50, 50);
+          shakeVector = shakeVector.rotate(Math.random() * Math.PI * 2);
+          engine.screenShaker.putAtPositon(shakeVector.x, shakeVector.y);
         }
         playerShots.forEach((shot) => {
           if (engine.physics.collide(asteroid, shot)) {
@@ -436,6 +447,9 @@ window.onload = async () => {
           enemyShots.splice(enemyShots.indexOf(enemyShot), 1);
           engine.removeActor(enemyShot);
           this.playerShip.damage();
+          let shakeVector = new Vector2(50, 50);
+          shakeVector = shakeVector.rotate(Math.random() * Math.PI * 2);
+          engine.screenShaker.putAtPositon(shakeVector.x, shakeVector.y);
         }
       });
 
@@ -725,7 +739,6 @@ window.onload = async () => {
       this.actors.push(this.playerShip);
       this.actors.push(spaceGameScript);
       engine.actors = this.actors;
-      console.log(engine.actors);
     }
     postRenders() {
       super.postRenders();
@@ -749,7 +762,7 @@ window.onload = async () => {
     canvasAutoAdjust();
   };
   startScene.postRenders = () => {};
-  startScene.postUpdates = () => {};
+  startScene.postUpdates = (delta) => {};
   startScene.onSceneEntry = () => {};
 
   startScene.preRenders = () => {};

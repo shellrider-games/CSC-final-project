@@ -4,6 +4,7 @@ import ShellPhysicsEngine from "./shellPhysicsEngine.js";
 import { GLOBALS } from "./shellriderEngineGlobals.js";
 import Sprite from "./sprite.js";
 import Scene from "./scene.js";
+import ScreenShaker from "./screenShaker.js";
 
 class ShellriderEngine {
   actors;
@@ -11,6 +12,7 @@ class ShellriderEngine {
   physics;
   audio;
   currentScene;
+  screenShaker;
 
   constructor(
     canvas,
@@ -38,6 +40,7 @@ class ShellriderEngine {
         active: false,
       };
     }
+    this.screenShaker = new ScreenShaker();
     this.physics = new ShellPhysicsEngine();
     this.audio = new ShellAudioSystem();
     this.actors = [];
@@ -70,16 +73,19 @@ class ShellriderEngine {
       this.lastTimestamp = performance.now();
       this.updateCanvasSize();
 
-      this.currentScene.preUpdates();
+      this.currentScene.preUpdates(delta);
       this.actors.forEach((actor) => {
         actor.update(delta);
       });
-      this.currentScene.postUpdates();
+      this.currentScene.postUpdates(delta);
+      this.screenShaker.update(delta);
+      GLOBALS.ctx.translate(this.screenShaker.shakePosition.x, this.screenShaker.shakePosition.y);
       this.currentScene.preRenders();
       this.actors.forEach((actor) => {
         actor.render();
       });
       this.currentScene.postRenders();
+      GLOBALS.ctx.resetTransform();
 
       GLOBALS.mouse.justClicked = false;
       requestAnimationFrame(() => {

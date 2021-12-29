@@ -33,7 +33,6 @@ class FireGenerator extends ParticleManager {
           200
         )
       );
-      console.log(this.particles);
       this.nextParticle = 0.05;
     }
   }
