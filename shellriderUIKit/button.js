@@ -49,7 +49,6 @@ class ShellriderButton extends Actor {
         break;
       case "pressed":
         if (this.pressedImage) {
-          GLOBALS.ctx.save();
           GLOBALS.ctx.translate(
             this.pressedTranlation.x,
             this.pressedTranlation.y
