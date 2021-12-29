@@ -7,6 +7,7 @@ import Scene from "./scene.js";
 import ShellriderButton from "./shellriderUIKit/button.js";
 import Particle from "./particle.js";
 import ParticleManager from "./particleManager.js";
+import FireGenerator from "./fireGenerator.js";
 
 window.toggleDebug = function () {
   GLOBALS.debug = !GLOBALS.debug;
@@ -181,6 +182,8 @@ window.onload = async () => {
     shield;
     nextShield;
     hitpoints;
+    fireEngine1;
+    fireEngine2;
 
     constructor(
       x = 0,
@@ -195,6 +198,8 @@ window.onload = async () => {
       this.shield = true;
       this.nextShield = 0;
       this.hitpoints = 1;
+      this.fireEngine1 = new FireGenerator(this.position.x+this.dimensions.width/2-25,this.position.y+this.dimensions.height-5,engine,{x: 0, y: 1});
+      this.fireEngine2 = new FireGenerator(this.position.x+this.dimensions.width/2+25,this.position.y+this.dimensions.height-5,engine,{x: 0, y: 1});
     }
 
     getBoundingBox() {
@@ -257,6 +262,16 @@ window.onload = async () => {
       if (!this.shield && this.nextShield <= 0) {
         this.shield = true;
       }
+      this.fireEngine1.position.x = this.position.x + this.dimensions.width/2 -25;
+      this.fireEngine1.position.y = this.position.y + this.dimensions.height-5;
+      
+      
+      this.fireEngine2.position.x = this.position.x + this.dimensions.width/2 + 25;
+      this.fireEngine2.position.y = this.position.y + this.dimensions.height-5;
+
+      this.fireEngine1.update(delta);
+      this.fireEngine2.update(delta);
+
     }
     render() {
       super.render();
@@ -305,6 +320,7 @@ window.onload = async () => {
     target;
     shotDelay;
     hitpoints;
+    fireEngine;
     constructor(x, y, width = 93, height = 84, hitpoints = 3) {
       super(x, y, width, height);
       this.sprite = enemyGruntSprite;
@@ -312,6 +328,7 @@ window.onload = async () => {
       this.target = { x: x, y: y };
       this.shotDelay = 1;
       this.hitpoints = hitpoints;
+      this.fireEngine = new FireGenerator(this.position.x+this.dimensions.width/2,this.position.y+5,engine);
     }
     update(delta) {
       this.shotDelay = Math.max(0, this.shotDelay - delta);
@@ -350,6 +367,11 @@ window.onload = async () => {
           this.position.y = this.target.y;
         }
       }
+      this.fireEngine.position.x = this.position.x+this.dimensions.width/2;
+      this.fireEngine.position.y = this.position.y+5;
+
+      this.fireEngine.update(delta);
+
       playerShots.forEach((playerShot) => {
         if (engine.physics.collide(this, playerShot)) {
           this.hitpoints -= 1;
@@ -477,7 +499,7 @@ window.onload = async () => {
         };
         onScreenEnemies.push(enemyGrunt);
         engine.addActor(enemyGrunt);
-      })
+      });
       const enemyStep2 = new EnemyStep(() => {
         const enemyGrunt = new EnemyGrunt(-100, 0);
         enemyGrunt.target = {
@@ -711,12 +733,7 @@ window.onload = async () => {
   };
   startScene.postRenders = () => {};
   startScene.postUpdates = () => {};
-  startScene.onSceneEntry = () => {
-    const partManager = new ParticleManager(engine);
-    partManager.addParticle(
-      new Particle(250, 250, 20, [255, 120, 0], 0.1, { x: 0, y: 1 }, 500)
-    );
-  };
+  startScene.onSceneEntry = () => {};
 
   startScene.preRenders = () => {};
 

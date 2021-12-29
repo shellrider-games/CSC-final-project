@@ -27,7 +27,7 @@ body {
     padding: 0;
     background: linear-gradient(
     0deg,
-    rgba(78, 103, 148, 1) 0%,
-    rgba(208, 102, 202, 1) 100%
+    rgb(48, 63, 90) 0%,
+    rgb(70, 35, 68) 100%
   );
 }

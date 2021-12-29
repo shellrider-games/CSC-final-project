@@ -23,6 +23,7 @@ class Particle extends Actor {
 
   render(){
       GLOBALS.ctx.save();
+      GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
       GLOBALS.ctx.translate(this.position.x, this.position.y);
       GLOBALS.ctx.fillStyle = `rgba(${this.rgbColour[0]},${this.rgbColour[1]},${this.rgbColour[2]},${(this.timeToLive-this.ellapsedTime)/this.timeToLive})`;
       GLOBALS.ctx.beginPath();
