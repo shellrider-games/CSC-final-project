@@ -5,10 +5,7 @@ import StaticBody from "./staticBody.js";
 import Actor from "./actor.js";
 import Scene from "./scene.js";
 import ShellriderButton from "./shellriderUIKit/button.js";
-import Particle from "./particle.js";
-import ParticleManager from "./particleManager.js";
 import FireGenerator from "./fireGenerator.js";
-import ScreenShaker from "./screenShaker.js";
 import Vector2 from "./shellriderMath/vector2.js";
 
 window.toggleDebug = function () {
