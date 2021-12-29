@@ -287,6 +287,7 @@ window.onload = async () => {
     }
     render() {
       super.render();
+      GLOBALS.ctx.save();
       if (this.shield) {
         GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
         GLOBALS.ctx.translate(
@@ -294,7 +295,7 @@ window.onload = async () => {
           this.position.y - 20
         );
         GLOBALS.ctx.drawImage(shieldSprite.image, 0, 0);
-        GLOBALS.ctx.resetTransform();
+        GLOBALS.ctx.restore();
       }
     }
 
@@ -767,6 +768,7 @@ window.onload = async () => {
     }
 
     postRenders() {
+      GLOBALS.ctx.save();
       GLOBALS.ctx.fillStyle = "#efefef";
       GLOBALS.ctx.font = `42px Arial`;
       GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
@@ -776,7 +778,7 @@ window.onload = async () => {
           GLOBALS.ctx.measureText(this.text).width / 2,
         GLOBALS.virtualScreenSize.height / 2 - 100
       );
-      GLOBALS.ctx.resetTransform();
+      GLOBALS.ctx.restore();
     }
     onSceneEntry() {}
     postUpdates() {}

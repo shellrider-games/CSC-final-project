@@ -17,10 +17,10 @@ class Sprite {
     return new Promise((resolve, reject) => {
       this.image.onload = () => {
         if (typeof this.width !== "number") {
-            this.width = this.image.naturalWidth;
+          this.width = this.image.naturalWidth;
         }
         if (typeof this.height !== "number") {
-            this.height = this.image.naturalHeight;
+          this.height = this.image.naturalHeight;
         }
         resolve();
       };

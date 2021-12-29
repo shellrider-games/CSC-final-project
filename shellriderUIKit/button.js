@@ -32,6 +32,7 @@ class ShellriderButton extends Actor {
     this.prevState = "default";
   }
   render() {
+    GLOBALS.ctx.save();
     GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
     GLOBALS.ctx.translate(this.position.x, this.position.y);
 
@@ -73,7 +74,7 @@ class ShellriderButton extends Actor {
           2
     );
     this.prevState = this.state;
-    GLOBALS.ctx.resetTransform();
+    GLOBALS.ctx.restore();
   }
 
   onPressed() {}

@@ -14,6 +14,7 @@ class StaticBody extends Actor {
   }
 
   render() {
+    GLOBALS.ctx.save();
     let saveFillStyle = GLOBALS.ctx.fillStyle;
     let saveStrokeStyle = GLOBALS.ctx.strokeStyle;
     GLOBALS.ctx.translate(
@@ -39,7 +40,7 @@ class StaticBody extends Actor {
     }
     if (GLOBALS.debug) {
       GLOBALS.ctx.strokeStyle = "limegreen";
-      GLOBALS.ctx.resetTransform();
+      GLOBALS.ctx.restore();
       const bb = this.getBoundingBox();
       GLOBALS.ctx.strokeRect(
         bb.x * GLOBALS.scaleFactor.x,
@@ -50,7 +51,7 @@ class StaticBody extends Actor {
     }
     GLOBALS.ctx.fillStyle = saveFillStyle;
     GLOBALS.ctx.strokeStyle = saveStrokeStyle;
-    GLOBALS.ctx.resetTransform();
+    GLOBALS.ctx.restore();
   }
 
   getBoundingBox() {
