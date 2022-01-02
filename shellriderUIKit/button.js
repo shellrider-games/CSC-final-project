@@ -60,7 +60,7 @@ class ShellriderButton extends Actor {
         break;
     }
 
-    GLOBALS.ctx.font = "bold 42px Arial";
+    GLOBALS.ctx.font = "bold 42px KenneyFuture";
     GLOBALS.ctx.fillStyle = "161715";
 
     const textMeasure = GLOBALS.ctx.measureText(this.text);

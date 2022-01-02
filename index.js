@@ -26,6 +26,9 @@ window.onload = async () => {
   const canvas = document.querySelector("#gameCanvas");
   const engine = new ShellriderEngine(canvas);
   const fullSreenButton = document.querySelector("#fullscreen");
+  const kenneyFuture = new FontFace('KenneyFuture', 'url(./assets/fonts/KenneyFuture.ttf)');
+  await kenneyFuture.load();
+  document.fonts.add(kenneyFuture);
 
   const canvasAutoAdjust = function () {
     GLOBALS.canvasSize.height =
@@ -761,7 +764,27 @@ window.onload = async () => {
   startScene.preUpdates = () => {
     canvasAutoAdjust();
   };
-  startScene.postRenders = () => {};
+  startScene.postRenders = () => {
+    GLOBALS.ctx.save();
+    GLOBALS.ctx.fillStyle = "#efefef";
+    GLOBALS.ctx.font = `24px KenneyFuture`;
+    const txt = "a game by Georg Becker";
+    const txt2 = "images and font from Kenney"
+      GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
+      GLOBALS.ctx.fillText(
+        txt,
+        440 -
+          GLOBALS.ctx.measureText(txt2).width / 2,
+        1200
+      );
+      GLOBALS.ctx.fillText(
+        txt2,
+        440 -
+          GLOBALS.ctx.measureText(txt2).width / 2,
+        1240
+      );
+      GLOBALS.ctx.restore();
+  };
   startScene.postUpdates = (delta) => {};
   startScene.onSceneEntry = () => {};
 
@@ -783,7 +806,7 @@ window.onload = async () => {
     postRenders() {
       GLOBALS.ctx.save();
       GLOBALS.ctx.fillStyle = "#efefef";
-      GLOBALS.ctx.font = `42px Arial`;
+      GLOBALS.ctx.font = `42px KenneyFuture`;
       GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
       GLOBALS.ctx.fillText(
         this.text,
