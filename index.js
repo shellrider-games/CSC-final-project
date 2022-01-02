@@ -832,7 +832,7 @@ window.onload = async () => {
   };
 
   const gameOverScene = new EndState("GAME OVER!", [restartButton]);
-  const winScene = new EndState("CONGRATULATIONS YOU WON!", [restartButton]);
+  const winScene = new EndState("YOU WON!", [restartButton]);
 
   engine.loadScene(startScene);
 };
