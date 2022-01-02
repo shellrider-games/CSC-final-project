@@ -7,6 +7,7 @@ import Scene from "./scene.js";
 import ShellriderButton from "./shellriderUIKit/button.js";
 import FireGenerator from "./fireGenerator.js";
 import Vector2 from "./shellriderMath/vector2.js";
+import ParticleExplosion from "./particleExplosion.js";
 
 window.toggleDebug = function () {
   GLOBALS.debug = !GLOBALS.debug;
@@ -405,6 +406,8 @@ window.onload = async () => {
         engine.screenShaker.putAtPositon(shakeVector.x, shakeVector.y);
         engine.audio.play("explosion");
         onScreenEnemies.splice(onScreenEnemies.indexOf(this), 1);
+        const explosion = new ParticleExplosion(this.position.x+this.dimensions.width/2, this.position.y+this.dimensions.height/2, engine);
+        engine.addActor(explosion);
         engine.removeActor(this);
       }
     }
