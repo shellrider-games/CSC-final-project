@@ -26,7 +26,10 @@ window.onload = async () => {
   const canvas = document.querySelector("#gameCanvas");
   const engine = new ShellriderEngine(canvas);
   const fullSreenButton = document.querySelector("#fullscreen");
-  const kenneyFuture = new FontFace('KenneyFuture', 'url(./assets/fonts/KenneyFuture.ttf)');
+  const kenneyFuture = new FontFace(
+    "KenneyFuture",
+    "url(./assets/fonts/KenneyFuture.ttf)"
+  );
   await kenneyFuture.load();
   document.fonts.add(kenneyFuture);
 
@@ -79,6 +82,9 @@ window.onload = async () => {
   );
   const enemyGruntSprite = await engine.requestSprite(
     "./assets/img/enemyBlue1.png"
+  );
+  const spreadShotEnemySprite = await engine.requestSprite(
+    "./assets/img/enemyBlue2.png"
   );
   const enemyLaserSprite = await engine.requestSprite(
     "./assets/img/laserRed15.png"
@@ -389,7 +395,6 @@ window.onload = async () => {
       }
       this.fireEngine.position.x = this.position.x + this.dimensions.width / 2;
       this.fireEngine.position.y = this.position.y + 5;
-
       this.fireEngine.update(delta);
 
       playerShots.forEach((playerShot) => {
@@ -409,10 +414,21 @@ window.onload = async () => {
         engine.screenShaker.putAtPositon(shakeVector.x, shakeVector.y);
         engine.audio.play("explosion");
         onScreenEnemies.splice(onScreenEnemies.indexOf(this), 1);
-        const explosion = new ParticleExplosion(this.position.x+this.dimensions.width/2, this.position.y+this.dimensions.height/2, engine);
+        const explosion = new ParticleExplosion(
+          this.position.x + this.dimensions.width / 2,
+          this.position.y + this.dimensions.height / 2,
+          engine
+        );
         engine.addActor(explosion);
         engine.removeActor(this);
       }
+    }
+  }
+
+  class SpreadShotEnemy extends StaticBody {
+    constructor(x, y, width = 104, height = 84) {
+      super(x, y, width, height);
+      this.sprite = spreadShotEnemySprite;
     }
   }
 
@@ -769,21 +785,19 @@ window.onload = async () => {
     GLOBALS.ctx.fillStyle = "#efefef";
     GLOBALS.ctx.font = `24px KenneyFuture`;
     const txt = "a game by Georg Becker";
-    const txt2 = "images and font from Kenney"
-      GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
-      GLOBALS.ctx.fillText(
-        txt,
-        440 -
-          GLOBALS.ctx.measureText(txt2).width / 2,
-        1200
-      );
-      GLOBALS.ctx.fillText(
-        txt2,
-        440 -
-          GLOBALS.ctx.measureText(txt2).width / 2,
-        1240
-      );
-      GLOBALS.ctx.restore();
+    const txt2 = "images and font from Kenney";
+    GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
+    GLOBALS.ctx.fillText(
+      txt,
+      440 - GLOBALS.ctx.measureText(txt2).width / 2,
+      1200
+    );
+    GLOBALS.ctx.fillText(
+      txt2,
+      440 - GLOBALS.ctx.measureText(txt2).width / 2,
+      1240
+    );
+    GLOBALS.ctx.restore();
   };
   startScene.postUpdates = (delta) => {};
   startScene.onSceneEntry = () => {};
