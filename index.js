@@ -70,25 +70,25 @@ window.onload = async () => {
     "./assets/audio/effects/hit_asteroid.wav",
     "hit_asteroid"
   );
-  const asteroidSprite = await engine.requestSprite(
+  GLOBALS.sprites.asteroidSprite = await engine.requestSprite(
     "./assets/img/meteorGrey_big1.png"
   );
-  const laserShotSprite = await engine.requestSprite(
+  GLOBALS.sprites.laserShotSprite = await engine.requestSprite(
     "./assets/img/laserGreen13.png"
   );
-  const enemyGruntSprite = await engine.requestSprite(
+  GLOBALS.sprites.enemyGruntSprite = await engine.requestSprite(
     "./assets/img/enemyBlue1.png"
   );
-  const spreadShotEnemySprite = await engine.requestSprite(
+  GLOBALS.sprites.spreadShotEnemySprite = await engine.requestSprite(
     "./assets/img/enemyBlue2.png"
   );
-  const enemyLaserSprite = await engine.requestSprite(
+  GLOBALS.sprites.enemyLaserSprite = await engine.requestSprite(
     "./assets/img/laserRed15.png"
   );
-  const playerShipSprite = await engine.requestSprite(
+  GLOBALS.sprites.playerShipSprite = await engine.requestSprite(
     "./assets/img/playerShip1_red.png"
   );
-  const shieldSprite = await engine.requestSprite("./assets/img/shield1.png");
+  GLOBALS.sprites.shieldSprite = await engine.requestSprite("./assets/img/shield1.png");
 
   class LevelStep extends Actor {
     next;
@@ -123,7 +123,7 @@ window.onload = async () => {
   class Asteroid extends StaticBody {
     constructor(x, y, width = 101, height = 84) {
       super(x, y, width, height);
-      this.sprite = asteroidSprite;
+      this.sprite = GLOBALS.sprites.asteroidSprite;
     }
 
     update(delta) {
@@ -170,7 +170,7 @@ window.onload = async () => {
   class PlayerShot extends StaticBody {
     constructor(x, y, width = 9, height = 37) {
       super(x, y, width, height);
-      this.sprite = laserShotSprite;
+      this.sprite = GLOBALS.sprites.laserShotSprite;
     }
     update(delta) {
       this.position.y -= 1000 * delta;
@@ -197,7 +197,7 @@ window.onload = async () => {
       height = 75
     ) {
       super(x, y, width, height);
-      this.sprite = playerShipSprite;
+      this.sprite = GLOBALS.sprites.playerShipSprite;
       this.speed = 500;
       this.shotDelay = 0;
       this.shield = true;
@@ -266,7 +266,7 @@ window.onload = async () => {
         const newShot = new PlayerShot(
           this.position.x +
             this.dimensions.width / 2 -
-            laserShotSprite.width / 2,
+            GLOBALS.sprites.laserShotSprite.width / 2,
           this.position.y - this.dimensions.height / 2
         );
         this.shotDelay = 0.25;
@@ -296,10 +296,10 @@ window.onload = async () => {
       if (this.shield) {
         GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
         GLOBALS.ctx.translate(
-          this.position.x + this.dimensions.width / 2 - shieldSprite.width / 2,
+          this.position.x + this.dimensions.width / 2 - GLOBALS.sprites.shieldSprite.width / 2,
           this.position.y - 20
         );
-        GLOBALS.ctx.drawImage(shieldSprite.image, 0, 0);
+        GLOBALS.ctx.drawImage(GLOBALS.sprites.shieldSprite.image, 0, 0);
         GLOBALS.ctx.restore();
       }
     }
@@ -322,7 +322,7 @@ window.onload = async () => {
     //default width and height are smaller than the sprite to make it easier for the player to evade
     constructor(x, y, width = 9, height = 37) {
       super(x, y, width, height);
-      this.sprite = enemyLaserSprite;
+      this.sprite = GLOBALS.sprites.enemyLaserSprite;
     }
     update(delta) {
       this.position.y += 600 * delta;
@@ -341,7 +341,7 @@ window.onload = async () => {
     fireEngine;
     constructor(x, y, width = 93, height = 84, hitpoints = 3) {
       super(x, y, width, height);
-      this.sprite = enemyGruntSprite;
+      this.sprite = GLOBALS.sprites.enemyGruntSprite;
       this.speed = 300;
       this.target = { x: x, y: y };
       this.shotDelay = 1;
@@ -424,7 +424,7 @@ window.onload = async () => {
   class SpreadShotEnemy extends StaticBody {
     constructor(x, y, width = 104, height = 84) {
       super(x, y, width, height);
-      this.sprite = spreadShotEnemySprite;
+      this.sprite = GLOBALS.sprites.spreadShotEnemySprite;
     }
   }
 

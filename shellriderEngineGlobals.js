@@ -5,5 +5,6 @@ export const GLOBALS = {
   touch: undefined,
   images: {},
   debug: false,
+  sprites: {},
   gamedata: {},
 };
