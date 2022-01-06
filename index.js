@@ -70,7 +70,7 @@ window.onload = async () => {
     "./assets/audio/effects/hit_asteroid.wav",
     "hit_asteroid"
   );
-  let asteroids = [];
+  GLOBALS.gamedata.asteroids = [];
   let playerShots = [];
   let enemyShots = [];
   let onScreenEnemies = [];
@@ -133,7 +133,7 @@ window.onload = async () => {
     update(delta) {
       this.position.y += 300 * delta;
       if (this.position.y >= GLOBALS.virtualScreenSize.height + 200) {
-        asteroids.splice(asteroids.indexOf(this), 1);
+        GLOBALS.gamedata.asteroids.splice(GLOBALS.gamedata.asteroids.indexOf(this), 1);
         engine.removeActor(this);
       }
     }
@@ -163,7 +163,7 @@ window.onload = async () => {
           randomNumberBetween(0, GLOBALS.virtualScreenSize.width - 101),
           -100
         );
-        asteroids.push(asteroid);
+        GLOBALS.gamedata.asteroids.push(asteroid);
         engine.addActor(asteroid);
         this.timeTracker = 0; //at zero to prevent multiple spawns on window focus
         this.nextSpawn = randomNumberBetween(250, 750) / 1000;
@@ -442,10 +442,10 @@ window.onload = async () => {
     }
 
     postUpdates(delta) {
-      asteroids.forEach((asteroid) => {
+      GLOBALS.gamedata.asteroids.forEach((asteroid) => {
         if (engine.physics.collide(asteroid, this.playerShip)) {
           engine.audio.play("explosion");
-          asteroids.splice(asteroids.indexOf(asteroid), 1);
+          GLOBALS.gamedata.asteroids.splice(GLOBALS.gamedata.asteroids.indexOf(asteroid), 1);
           engine.removeActor(asteroid);
           this.playerShip.damage();
           let shakeVector = new Vector2(50, 50);
@@ -482,7 +482,7 @@ window.onload = async () => {
       this.actors = [];
       onScreenEnemies = [];
       playerShots = [];
-      asteroids = [];
+      GLOBALS.gamedata.asteroids = [];
       super.onSceneEntry();
       class WaitStep extends LevelStep {
         timePassed;
