@@ -1,7 +1,7 @@
-import Particle from "./particle.js";
-import ParticleManager from "./particleManager.js";
-import { randomNumberBetween } from "./toolBox.js";
-import Vector2 from "./shellriderMath/vector2.js";
+import Particle from "../engineSrc/particle.js";
+import ParticleManager from "../engineSrc/particleManager.js";
+import { randomNumberBetween } from "../engineSrc/toolBox.js";
+import Vector2 from "../shellriderMath/vector2.js";
 
 class FireGenerator extends ParticleManager {
   nextParticle;

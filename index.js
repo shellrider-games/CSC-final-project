@@ -1,13 +1,14 @@
-import ShellriderEngine from "./shellriderEngine.js";
-import { GLOBALS } from "./shellriderEngineGlobals.js";
-import { randomNumberBetween } from "./toolBox.js";
-import StaticBody from "./staticBody.js";
-import Actor from "./actor.js";
-import Scene from "./scene.js";
+import ShellriderEngine from "./engineSrc/shellriderEngine.js";
+import { GLOBALS } from "./engineSrc/shellriderEngineGlobals.js";
+import { randomNumberBetween } from "./engineSrc/toolBox.js";
+import StaticBody from "./engineSrc/staticBody.js";
+import Actor from "./engineSrc/actor.js";
+import Scene from "./engineSrc/scene.js";
 import ShellriderButton from "./shellriderUIKit/button.js";
-import FireGenerator from "./fireGenerator.js";
+import FireGenerator from "./gameSrc/fireGenerator.js";
 import Vector2 from "./shellriderMath/vector2.js";
-import ParticleExplosion from "./particleExplosion.js";
+import ParticleExplosion from "./gameSrc/particleExplosion.js";
+import LevelStep from "./gameSrc/levelStep.js";
 
 window.toggleDebug = function () {
   GLOBALS.debug = !GLOBALS.debug;
@@ -89,15 +90,6 @@ window.onload = async () => {
     "./assets/img/playerShip1_red.png"
   );
   GLOBALS.sprites.shieldSprite = await engine.requestSprite("./assets/img/shield1.png");
-
-  class LevelStep extends Actor {
-    next;
-    constructor(update = function (delta) {}) {
-      super();
-      this.update = update;
-      this.next = false;
-    }
-  }
 
   class LevelScript extends Actor {
     steps;

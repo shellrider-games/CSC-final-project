@@ -1,4 +1,4 @@
-import Vector2 from "./shellriderMath/vector2.js";
+import Vector2 from "../shellriderMath/vector2.js";
 
 class ScreenShaker {
   velocity;

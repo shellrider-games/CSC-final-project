@@ -1,6 +1,6 @@
-import Actor from "../actor.js";
-import { GLOBALS } from "../shellriderEngineGlobals.js";
-import NineSliceImage from "../NineSliceImage.js";
+import Actor from "../engineSrc/actor.js";
+import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
+import NineSliceImage from "../engineSrc/NineSliceImage.js";
 
 class ShellriderButton extends Actor {
   position;

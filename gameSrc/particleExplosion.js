@@ -1,6 +1,6 @@
-import Particle from "./particle.js";
-import ParticleManager from "./particleManager.js";
-import { randomNumberBetween } from "./toolBox.js";
+import Particle from "../engineSrc/particle.js";
+import ParticleManager from "../engineSrc/particleManager.js";
+import { randomNumberBetween } from "../engineSrc/toolBox.js";
 
 class ParticleExplosion extends ParticleManager {
   timeToLive;
