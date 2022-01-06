@@ -142,6 +142,7 @@ class ShellriderEngine {
     this.initMouse();
     this.initTouch();
     this.initUIKit();
+    GLOBALS.engine = this;
   }
 
   loadScene(scene) {

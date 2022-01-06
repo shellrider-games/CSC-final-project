@@ -7,4 +7,5 @@ export const GLOBALS = {
   debug: false,
   sprites: {},
   gamedata: {},
+  scenes: {},
 };
