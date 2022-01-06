@@ -70,8 +70,6 @@ window.onload = async () => {
     "./assets/audio/effects/hit_asteroid.wav",
     "hit_asteroid"
   );
-  GLOBALS.gamedata.asteroids = [];
-  let playerShots = [];
   let enemyShots = [];
   let onScreenEnemies = [];
   const asteroidSprite = await engine.requestSprite(
@@ -179,7 +177,7 @@ window.onload = async () => {
     update(delta) {
       this.position.y -= 1000 * delta;
       if (this.position.y <= -200) {
-        playerShots.splice(playerShots.indexOf(this), 1);
+        GLOBALS.gamedata.playerShots.splice(GLOBALS.gamedata.playerShots.indexOf(this), 1);
         engine.removeActor(this);
       }
     }
@@ -275,7 +273,7 @@ window.onload = async () => {
         );
         this.shotDelay = 0.25;
         engine.audio.play("laser");
-        playerShots.push(newShot);
+        GLOBALS.gamedata.playerShots.push(newShot);
         engine.addActor(newShot);
       }
       if (!this.shield && this.nextShield <= 0) {
@@ -397,14 +395,14 @@ window.onload = async () => {
       this.fireEngine.position.y = this.position.y + 5;
       this.fireEngine.update(delta);
 
-      playerShots.forEach((playerShot) => {
+      GLOBALS.gamedata.playerShots.forEach((playerShot) => {
         if (engine.physics.collide(this, playerShot)) {
           this.hitpoints -= 1;
           let shakeVector = new Vector2(1, 1);
           shakeVector = shakeVector.rotate(Math.random() * Math.PI * 2);
           engine.screenShaker.putAtPositon(shakeVector.x, shakeVector.y);
           engine.audio.play("hit");
-          playerShots.splice(playerShots.indexOf(playerShot), 1);
+          GLOBALS.gamedata.playerShots.splice(GLOBALS.gamedata.playerShots.indexOf(playerShot), 1);
           engine.removeActor(playerShot);
         }
       });
@@ -452,9 +450,9 @@ window.onload = async () => {
           shakeVector = shakeVector.rotate(Math.random() * Math.PI * 2);
           engine.screenShaker.putAtPositon(shakeVector.x, shakeVector.y);
         }
-        playerShots.forEach((shot) => {
+        GLOBALS.gamedata.playerShots.forEach((shot) => {
           if (engine.physics.collide(asteroid, shot)) {
-            playerShots.splice(playerShots.indexOf(shot), 1);
+            GLOBALS.gamedata.playerShots.splice(GLOBALS.gamedata.playerShots.indexOf(shot), 1);
             engine.audio.play("hit_asteroid");
             engine.removeActor(shot);
           }
@@ -481,7 +479,7 @@ window.onload = async () => {
     onSceneEntry() {
       this.actors = [];
       onScreenEnemies = [];
-      playerShots = [];
+      GLOBALS.gamedata.playerShots = [];
       GLOBALS.gamedata.asteroids = [];
       super.onSceneEntry();
       class WaitStep extends LevelStep {
