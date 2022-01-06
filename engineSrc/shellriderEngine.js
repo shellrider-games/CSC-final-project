@@ -79,7 +79,10 @@ class ShellriderEngine {
       });
       this.currentScene.postUpdates(delta);
       this.screenShaker.update(delta);
-      GLOBALS.ctx.translate(this.screenShaker.shakePosition.x, this.screenShaker.shakePosition.y);
+      GLOBALS.ctx.translate(
+        this.screenShaker.shakePosition.x,
+        this.screenShaker.shakePosition.y
+      );
       this.currentScene.preRenders();
       this.actors.forEach((actor) => {
         actor.render();
