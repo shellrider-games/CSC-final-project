@@ -70,7 +70,6 @@ window.onload = async () => {
     "./assets/audio/effects/hit_asteroid.wav",
     "hit_asteroid"
   );
-  let onScreenEnemies = [];
   const asteroidSprite = await engine.requestSprite(
     "./assets/img/meteorGrey_big1.png"
   );
@@ -410,7 +409,7 @@ window.onload = async () => {
         shakeVector = shakeVector.rotate(Math.random() * Math.PI * 2);
         engine.screenShaker.putAtPositon(shakeVector.x, shakeVector.y);
         engine.audio.play("explosion");
-        onScreenEnemies.splice(onScreenEnemies.indexOf(this), 1);
+        GLOBALS.gamedata.onScreenEnemies.splice(GLOBALS.gamedata.onScreenEnemies.indexOf(this), 1);
         const explosion = new ParticleExplosion(
           this.position.x + this.dimensions.width / 2,
           this.position.y + this.dimensions.height / 2,
@@ -477,7 +476,7 @@ window.onload = async () => {
 
     onSceneEntry() {
       this.actors = [];
-      onScreenEnemies = [];
+      GLOBALS.gamedata.onScreenEnemies = [];
       GLOBALS.gamedata.playerShots = [];
       GLOBALS.gamedata.asteroids = [];
       GLOBALS.gamedata.enemyShots = [];
@@ -527,7 +526,7 @@ window.onload = async () => {
               this.init = true;
             }
             func(delta);
-            if (onScreenEnemies.length === 0) {
+            if (GLOBALS.gamedata.onScreenEnemies.length === 0) {
               this.next = true;
               engine.removeActor(this);
             }
@@ -545,7 +544,7 @@ window.onload = async () => {
             enemyGrunt.dimensions.width / 2,
           y: 200,
         };
-        onScreenEnemies.push(enemyGrunt);
+        GLOBALS.gamedata.onScreenEnemies.push(enemyGrunt);
         engine.addActor(enemyGrunt);
       });
       const enemyStep2 = new EnemyStep(() => {
@@ -565,9 +564,9 @@ window.onload = async () => {
             100,
           y: 200,
         };
-        onScreenEnemies.push(enemyGrunt);
+        GLOBALS.gamedata.onScreenEnemies.push(enemyGrunt);
         engine.addActor(enemyGrunt);
-        onScreenEnemies.push(enemyGrunt2);
+        GLOBALS.gamedata.onScreenEnemies.push(enemyGrunt2);
         engine.addActor(enemyGrunt2);
       });
       const enemyStep3 = new EnemyStep(() => {
@@ -606,13 +605,13 @@ window.onload = async () => {
             250,
           y: 100,
         };
-        onScreenEnemies.push(enemyGrunt);
+        GLOBALS.gamedata.onScreenEnemies.push(enemyGrunt);
         engine.addActor(enemyGrunt);
-        onScreenEnemies.push(enemyGrunt2);
+        GLOBALS.gamedata.onScreenEnemies.push(enemyGrunt2);
         engine.addActor(enemyGrunt2);
-        onScreenEnemies.push(enemyGrunt3);
+        GLOBALS.gamedata.onScreenEnemies.push(enemyGrunt3);
         engine.addActor(enemyGrunt3);
-        onScreenEnemies.push(enemyGrunt4);
+        GLOBALS.gamedata.onScreenEnemies.push(enemyGrunt4);
         engine.addActor(enemyGrunt4);
       });
 
@@ -646,7 +645,7 @@ window.onload = async () => {
           { x: GLOBALS.virtualScreenSize.width - 110, y: 200 },
           { x: 10, y: 200 },
         ]);
-        onScreenEnemies.push(movingEnemyStep.enemyGrunt);
+        GLOBALS.gamedata.onScreenEnemies.push(movingEnemyStep.enemyGrunt);
         engine.addActor(movingEnemyStep.enemyGrunt);
       });
 
@@ -667,9 +666,9 @@ window.onload = async () => {
           { x: GLOBALS.virtualScreenSize.width - 110, y: 50 },
           { x: 10, y: 50 },
         ]);
-        onScreenEnemies.push(movingEnemyStep2.enemyGrunt1);
-        onScreenEnemies.push(movingEnemyStep2.enemyGrunt2);
-        onScreenEnemies.push(movingEnemyStep2.enemyGrunt3);
+        GLOBALS.gamedata.onScreenEnemies.push(movingEnemyStep2.enemyGrunt1);
+        GLOBALS.gamedata.onScreenEnemies.push(movingEnemyStep2.enemyGrunt2);
+        GLOBALS.gamedata.onScreenEnemies.push(movingEnemyStep2.enemyGrunt3);
         engine.addActor(movingEnemyStep2.enemyGrunt1);
         engine.addActor(movingEnemyStep2.enemyGrunt2);
         engine.addActor(movingEnemyStep2.enemyGrunt3);
@@ -723,8 +722,8 @@ window.onload = async () => {
           ]
         );
 
-        onScreenEnemies.push(sineEnemyPattern.enemyGrunt1);
-        onScreenEnemies.push(sineEnemyPattern.enemyGrunt2);
+        GLOBALS.gamedata.onScreenEnemies.push(sineEnemyPattern.enemyGrunt1);
+        GLOBALS.gamedata.onScreenEnemies.push(sineEnemyPattern.enemyGrunt2);
         engine.addActor(sineEnemyPattern.enemyGrunt1);
         engine.addActor(sineEnemyPattern.enemyGrunt2);
       });
