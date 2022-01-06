@@ -70,7 +70,6 @@ window.onload = async () => {
     "./assets/audio/effects/hit_asteroid.wav",
     "hit_asteroid"
   );
-  let enemyShots = [];
   let onScreenEnemies = [];
   const asteroidSprite = await engine.requestSprite(
     "./assets/img/meteorGrey_big1.png"
@@ -329,7 +328,7 @@ window.onload = async () => {
     update(delta) {
       this.position.y += 600 * delta;
       if (this.position.y >= GLOBALS.virtualScreenSize.height + 200) {
-        enemyShots.splice(enemyShots.indexOf(this), 1);
+        GLOBALS.gamedata.enemyShots.splice(GLOBALS.gamedata.enemyShots.indexOf(this), 1);
         engine.removeActor(this);
       }
     }
@@ -363,7 +362,7 @@ window.onload = async () => {
         );
         this.shotDelay = 2;
         engine.audio.play("laser");
-        enemyShots.push(newShot);
+        GLOBALS.gamedata.enemyShots.push(newShot);
         engine.addActor(newShot);
       }
       if (
@@ -458,10 +457,10 @@ window.onload = async () => {
           }
         });
       });
-      enemyShots.forEach((enemyShot) => {
+      GLOBALS.gamedata.enemyShots.forEach((enemyShot) => {
         if (engine.physics.collide(enemyShot, this.playerShip)) {
           engine.audio.play("explosion");
-          enemyShots.splice(enemyShots.indexOf(enemyShot), 1);
+          GLOBALS.gamedata.enemyShots.splice(GLOBALS.gamedata.enemyShots.indexOf(enemyShot), 1);
           engine.removeActor(enemyShot);
           this.playerShip.damage();
           let shakeVector = new Vector2(50, 50);
@@ -481,6 +480,7 @@ window.onload = async () => {
       onScreenEnemies = [];
       GLOBALS.gamedata.playerShots = [];
       GLOBALS.gamedata.asteroids = [];
+      GLOBALS.gamedata.enemyShots = [];
       super.onSceneEntry();
       class WaitStep extends LevelStep {
         timePassed;
