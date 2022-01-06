@@ -1,5 +1,5 @@
-import Actor from '../actor.js';
-import StaticBody from '../staticBody.js';
+import Actor from '../engineSrc/actor';
+import StaticBody from '../engineSrc/staticBody.js';
 
 test("Can create StaticBody", () => {
     const testStaticBody = new StaticBody();

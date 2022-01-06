@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals';
-import ShellPhysicsEngine from '../shellPhysicsEngine.js';
-import StaticBody from '../staticBody.js';
+import ShellPhysicsEngine from '../engineSrc/shellPhysicsEngine.js';
+import StaticBody from '../engineSrc/staticBody.js';
 
 test("Can create PhysicsEngine",() => {
     const testEngine = new ShellPhysicsEngine();
