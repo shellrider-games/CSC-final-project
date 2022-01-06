@@ -86,6 +86,9 @@ window.onload = async () => {
   GLOBALS.sprites.shieldSprite = await engine.requestSprite(
     "./assets/img/shield1.png"
   );
+  GLOBALS.sprites.enemySpreadLaserSprite = await engine.requestSprite(
+    "./assets/img/laserRed10.png"
+  );
 
   GLOBALS.scenes.spaceGameScene = new SpaceGameScene();
 

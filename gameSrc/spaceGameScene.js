@@ -10,6 +10,7 @@ import Vector2 from "../shellriderMath/vector2.js";
 import WaitStep from "./waitStep.js";
 import EnemyStep from "./enemyStep.js";
 import PatrolingGrunt from "./patrolingGrunt.js";
+import SpreadShotEnemy from "./spreadShotEnemy.js";
 
 class SpaceGameScene extends Scene {
   playerShip;
@@ -185,6 +186,12 @@ class SpaceGameScene extends Scene {
       GLOBALS.engine.addActor(movingEnemyStep2.enemyGrunt3);
     });
 
+    const spreadEnemyStep1 = new EnemyStep(() => {
+      const spreadEnemy = new SpreadShotEnemy(200, 200);
+      GLOBALS.gamedata.onScreenEnemies.push(spreadEnemy);
+      GLOBALS.engine.addActor(spreadEnemy);
+    });
+
     const sineEnemyPattern = new EnemyStep(() => {
       const widthEighth = (GLOBALS.virtualScreenSize.width - 110) / 8;
       const ySway = (n, yEpsilon) => {
@@ -245,6 +252,8 @@ class SpaceGameScene extends Scene {
     });
 
     const spaceGameScript = new LevelScript([
+      new WaitStep(0.5),
+      spreadEnemyStep1,
       new WaitStep(0.5),
       enemyStep,
       new WaitStep(0.25),
