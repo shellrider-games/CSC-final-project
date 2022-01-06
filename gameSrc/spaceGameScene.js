@@ -1,12 +1,15 @@
 import Scene from "../engineSrc/scene.js";
 import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 import LevelStep from "./levelStep.js";
-import AsteroidGenerator from "./asteroidGenerator.js";
+import AsteroidStep from "./asteroidStep.js";
 import EnemyGrunt from "./enemyGrunt.js";
 import LevelScript from "./levelScript.js";
 import PlayerShip from "./playerShip.js";
 import { canvasAutoAdjust } from "../index.js";
 import Vector2 from "../shellriderMath/vector2.js";
+import WaitStep from "./waitStep.js";
+import EnemyStep from "./enemyStep.js";
+import PatrolingGrunt from "./patrolingGrunt.js";
 
 class SpaceGameScene extends Scene {
   playerShip;
@@ -70,59 +73,7 @@ class SpaceGameScene extends Scene {
     GLOBALS.gamedata.asteroids = [];
     GLOBALS.gamedata.enemyShots = [];
     super.onSceneEntry();
-    class WaitStep extends LevelStep {
-      timePassed;
-      constructor(time) {
-        super((delta) => {
-          this.timePassed += delta;
-          if (this.timePassed >= time) {
-            this.next = true;
-            GLOBALS.engine.removeActor(this);
-          }
-        });
-        this.timePassed = 0;
-      }
-    }
-    class AsteroidStep extends LevelStep {
-      constructor() {
-        super((delta) => {
-          this.timePassed += delta;
-          if (!this.init) {
-            GLOBALS.engine.addActor(this.asteroidGenerator);
-            this.init = true;
-            this.asteroidGeneratorRemoved = false;
-          }
-          if (this.timePassed >= 5 && !this.asteroidGeneratorRemoved) {
-            GLOBALS.engine.removeActor(this.asteroidGenerator);
-            this.asteroidGeneratorRemoved = true;
-          }
-          if (this.timePassed >= 8) {
-            this.next = true;
-            GLOBALS.engine.removeActor(this);
-          }
-        });
-        this.init = false;
-        this.timePassed = 0;
-        this.asteroidGenerator = new AsteroidGenerator();
-      }
-    }
-    class EnemyStep extends LevelStep {
-      init;
-      constructor(init = () => {}, func = (delta) => {}) {
-        super((delta) => {
-          if (!this.init) {
-            init();
-            this.init = true;
-          }
-          func(delta);
-          if (GLOBALS.gamedata.onScreenEnemies.length === 0) {
-            this.next = true;
-            GLOBALS.engine.removeActor(this);
-          }
-        });
-        this.init = false;
-      }
-    }
+
     const asteroidStep = new AsteroidStep();
     const asteroidStep2 = new AsteroidStep();
     const enemyStep = new EnemyStep(() => {
@@ -199,31 +150,6 @@ class SpaceGameScene extends Scene {
       GLOBALS.gamedata.onScreenEnemies.push(enemyGrunt4);
       GLOBALS.engine.addActor(enemyGrunt4);
     });
-
-    class PatrolingGrunt extends EnemyGrunt {
-      wayPoints;
-      currentTargetPoint;
-      constructor(x, y, wayPoints = []) {
-        super(x, y);
-        if (wayPoints.length >= 1) {
-          this.target = wayPoints[0];
-          this.currentTargetPoint = 0;
-        }
-        this.wayPoints = wayPoints;
-      }
-
-      update(delta) {
-        super.update(delta);
-        if (
-          this.position.x === this.target.x &&
-          this.position.y === this.target.y
-        ) {
-          this.currentTargetPoint =
-            (this.currentTargetPoint + 1) % this.wayPoints.length;
-          this.target = this.wayPoints[this.currentTargetPoint];
-        }
-      }
-    }
 
     const movingEnemyStep = new EnemyStep(() => {
       movingEnemyStep.enemyGrunt = new PatrolingGrunt(-100, 200, [
