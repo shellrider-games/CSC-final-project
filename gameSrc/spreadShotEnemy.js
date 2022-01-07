@@ -5,6 +5,7 @@ class SpreadShotEnemy extends Enemy{
     constructor(x, y, width = 104, height = 84){
         super(x,y, width, height);
         this.sprite = GLOBALS.sprites.spreadShotEnemySprite;
+        this.hitpoints = 5;
     }
 }
 
