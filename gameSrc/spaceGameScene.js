@@ -187,9 +187,35 @@ class SpaceGameScene extends Scene {
     });
 
     const spreadEnemyStep1 = new EnemyStep(() => {
-      const spreadEnemy = new SpreadShotEnemy(200, 200);
+      const spreadEnemy = new SpreadShotEnemy(GLOBALS.virtualScreenSize.width/2 - 52, -200);
+      spreadEnemy.target = {
+        x:
+          GLOBALS.virtualScreenSize.width / 2 - spreadEnemy.dimensions.width / 2,
+        y: 360,
+      };
       GLOBALS.gamedata.onScreenEnemies.push(spreadEnemy);
       GLOBALS.engine.addActor(spreadEnemy);
+    });
+
+    const spreadEnemyStep2 = new EnemyStep(() => {
+      const spreadEnemy1 = new SpreadShotEnemy(GLOBALS.virtualScreenSize.width/2 - 52 - 160, -200);
+      spreadEnemy1.target = {
+        x:
+          GLOBALS.virtualScreenSize.width / 2 - spreadEnemy1.dimensions.width / 2 - 160,
+        y: 250,
+      };
+
+      const spreadEnemy2 = new SpreadShotEnemy(GLOBALS.virtualScreenSize.width/2 - 52 + 160, -200);
+      spreadEnemy2.target = {
+        x:
+          GLOBALS.virtualScreenSize.width / 2 - spreadEnemy2.dimensions.width / 2 + 160,
+        y: 250,
+      };
+
+      GLOBALS.gamedata.onScreenEnemies.push(spreadEnemy1);
+      GLOBALS.gamedata.onScreenEnemies.push(spreadEnemy2);
+      GLOBALS.engine.addActor(spreadEnemy1);
+      GLOBALS.engine.addActor(spreadEnemy2);
     });
 
     const sineEnemyPattern = new EnemyStep(() => {
@@ -253,8 +279,6 @@ class SpaceGameScene extends Scene {
 
     const spaceGameScript = new LevelScript([
       new WaitStep(0.5),
-      spreadEnemyStep1,
-      new WaitStep(0.5),
       enemyStep,
       new WaitStep(0.25),
       enemyStep2,
@@ -267,6 +291,9 @@ class SpaceGameScene extends Scene {
       new WaitStep(0.25),
       sineEnemyPattern,
       asteroidStep2,
+      new WaitStep(0.25),
+      spreadEnemyStep1,
+      spreadEnemyStep2,
       new WaitStep(0.5),
       winStep,
     ]);

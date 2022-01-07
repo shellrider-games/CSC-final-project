@@ -33,7 +33,7 @@ class EnemyGrunt extends Enemy {
       GLOBALS.gamedata.enemyShots.push(newShot);
       GLOBALS.engine.addActor(newShot);
     }
-    
+
     this.fireEngine.position.x = this.position.x + this.dimensions.width / 2;
     this.fireEngine.position.y = this.position.y + 5;
     this.fireEngine.update(delta);
