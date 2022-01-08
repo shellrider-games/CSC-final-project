@@ -8,8 +8,9 @@ class TextActor extends Actor {
   fill;
   stroke;
   font;
+  strokeWidth;
 
-  constructor(text, x, y, size = 24, fill = "black", font = "sans-serif", stroke = undefined) {
+  constructor(text, x, y, size = 24, fill = "black", font = "sans-serif", stroke = undefined, stokeWidth = 1) {
     super();
     this.position = { x: x, y: y };
     this.text = text;
@@ -17,12 +18,11 @@ class TextActor extends Actor {
     this.fill = fill;
     this.stroke = stroke;
     this.font = font;
+    this.strokeWidth = stokeWidth;
   }
 
   render() {
     GLOBALS.ctx.save();
-    let saveFillStyle = GLOBALS.ctx.fillStyle;
-    let saveStrokeStyle = GLOBALS.ctx.strokeStyle;
     GLOBALS.ctx.font = `${this.size}px ${this.font}`;
     GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
     GLOBALS.ctx.translate(
@@ -32,7 +32,7 @@ class TextActor extends Actor {
 
     GLOBALS.ctx.fillStyle = this.fill;
     GLOBALS.ctx.strokeStyle = this.stroke
-    GLOBALS.ctx.lineWidth = 4;
+    GLOBALS.ctx.lineWidth = this.strokeWidth;
     GLOBALS.ctx.fillText(this.text,0,0);
     if(this.stroke) {
         GLOBALS.ctx.strokeText(this.text,0,0);

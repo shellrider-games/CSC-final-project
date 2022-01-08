@@ -5,6 +5,7 @@ import ShellriderButton from "./shellriderUIKit/button.js";
 import SpaceGameScene from "./gameSrc/spaceGameScene.js";
 import EndState from "./gameSrc/endState.js";
 import TextActor from "./engineSrc/textActor.js";
+import TitleTextActor from "./gameSrc/titleTextActor.js";
 
 window.toggleDebug = function () {
   GLOBALS.debug = !GLOBALS.debug;
@@ -104,25 +105,39 @@ window.onload = async () => {
     engine.loadScene(GLOBALS.scenes.spaceGameScene);
   };
 
-  const testTextActor = new TextActor("Lorem Ipsum", GLOBALS.virtualScreenSize.width/2, 200,72,"white","KenneyFuture", "black");
+  const titleTextActor1 = new TitleTextActor("Generic", GLOBALS.virtualScreenSize.width/2, 200,72);
+  titleTextActor1.swayDistance = 6;
+  titleTextActor1.moveSpeed = 8;
+  const titleTextActor2 = new TitleTextActor("Space Shooter", GLOBALS.virtualScreenSize.width/2, 300,64);
 
-  const startScene = new Scene([startButton, testTextActor]);
+  const startScene = new Scene([startButton, titleTextActor1, titleTextActor2]);
   startScene.preUpdates = () => {
     canvasAutoAdjust();
   };
   startScene.postRenders = () => {
     GLOBALS.ctx.save();
-    GLOBALS.ctx.fillStyle = "#efefef";
+    GLOBALS.ctx.fillStyle = "white";
     GLOBALS.ctx.font = `24px KenneyFuture`;
     const txt = "a game by Georg Becker";
     const txt2 = "images and font from Kenney";
+
     GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
     GLOBALS.ctx.fillText(
       txt,
       440 - GLOBALS.ctx.measureText(txt2).width / 2,
       1200
     );
+    GLOBALS.ctx.strokeText(
+      txt,
+      440 - GLOBALS.ctx.measureText(txt2).width / 2,
+      1200
+    );
     GLOBALS.ctx.fillText(
+      txt2,
+      440 - GLOBALS.ctx.measureText(txt2).width / 2,
+      1240
+    );
+    GLOBALS.ctx.strokeText(
       txt2,
       440 - GLOBALS.ctx.measureText(txt2).width / 2,
       1240
