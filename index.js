@@ -4,6 +4,7 @@ import Scene from "./engineSrc/scene.js";
 import ShellriderButton from "./shellriderUIKit/button.js";
 import SpaceGameScene from "./gameSrc/spaceGameScene.js";
 import EndState from "./gameSrc/endState.js";
+import TextActor from "./engineSrc/textActor.js";
 
 window.toggleDebug = function () {
   GLOBALS.debug = !GLOBALS.debug;
@@ -103,7 +104,9 @@ window.onload = async () => {
     engine.loadScene(GLOBALS.scenes.spaceGameScene);
   };
 
-  const startScene = new Scene([startButton]);
+  const testTextActor = new TextActor("Lorem Ipsum", GLOBALS.virtualScreenSize.width/2, 200,72,"white","KenneyFuture", "black");
+
+  const startScene = new Scene([startButton, testTextActor]);
   startScene.preUpdates = () => {
     canvasAutoAdjust();
   };
