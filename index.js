@@ -105,12 +105,24 @@ window.onload = async () => {
     engine.loadScene(GLOBALS.scenes.spaceGameScene);
   };
 
+  const helpButton = new ShellriderButton(
+    GLOBALS.virtualScreenSize.width / 2 -180,
+    GLOBALS.virtualScreenSize.height / 2 + 80,
+    360,
+    80,
+    "HOW TO PlAY"
+  );
+
+  helpButton.onRelease = () => {
+    console.log("help button pressed");
+  }
+
   const titleTextActor1 = new TitleTextActor("Generic", GLOBALS.virtualScreenSize.width/2, 200,72);
   titleTextActor1.swayDistance = 6;
   titleTextActor1.moveSpeed = 8;
   const titleTextActor2 = new TitleTextActor("Space Shooter", GLOBALS.virtualScreenSize.width/2, 300,64);
 
-  const startScene = new Scene([startButton, titleTextActor1, titleTextActor2]);
+  const startScene = new Scene([startButton,helpButton , titleTextActor1, titleTextActor2]);
   startScene.preUpdates = () => {
     canvasAutoAdjust();
   };

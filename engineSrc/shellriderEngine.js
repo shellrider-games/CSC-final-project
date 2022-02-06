@@ -148,13 +148,14 @@ class ShellriderEngine {
     GLOBALS.engine = this;
   }
 
-  loadScene(scene) {
+  loadScene(scene, transitionFunction = () => {}) {
     const sceneCopy = scene;
     if (scene instanceof Scene) {
       GLOBALS.pause = true;
       this.currentScene = sceneCopy;
       this.actors = sceneCopy.actors;
       sceneCopy.onSceneEntry();
+      transitionFunction();
       this.run();
     }
   }
