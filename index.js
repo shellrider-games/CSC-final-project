@@ -106,7 +106,7 @@ window.onload = async () => {
   };
 
   const helpButton = new ShellriderButton(
-    GLOBALS.virtualScreenSize.width / 2 -180,
+    GLOBALS.virtualScreenSize.width / 2 - 180,
     GLOBALS.virtualScreenSize.height / 2 + 80,
     360,
     80,
@@ -114,15 +114,123 @@ window.onload = async () => {
   );
 
   helpButton.onRelease = () => {
-    console.log("help button pressed");
-  }
+    engine.loadScene(GLOBALS.scenes.helpScene);
+  };
 
-  const titleTextActor1 = new TitleTextActor("Generic", GLOBALS.virtualScreenSize.width/2, 200,72);
+  const titleTextActor1 = new TitleTextActor(
+    "Generic",
+    GLOBALS.virtualScreenSize.width / 2,
+    200,
+    72
+  );
   titleTextActor1.swayDistance = 6;
   titleTextActor1.moveSpeed = 8;
-  const titleTextActor2 = new TitleTextActor("Space Shooter", GLOBALS.virtualScreenSize.width/2, 300,64);
+  const titleTextActor2 = new TitleTextActor(
+    "Space Shooter",
+    GLOBALS.virtualScreenSize.width / 2,
+    300,
+    64
+  );
 
-  const startScene = new Scene([startButton,helpButton , titleTextActor1, titleTextActor2]);
+  const helpStartButton = new ShellriderButton(
+    GLOBALS.virtualScreenSize.width / 2 - 180,
+    GLOBALS.virtualScreenSize.height - 240,
+    360,
+    80,
+    "START GAME"
+  );
+
+  helpStartButton.onRelease = () => {
+    engine.loadScene(GLOBALS.scenes.spaceGameScene);
+  };
+
+  const helpScene = new Scene([helpStartButton]);
+
+  helpScene.postRenders = () => {
+    GLOBALS.ctx.save();
+    GLOBALS.ctx.fillStyle = "white";
+    GLOBALS.ctx.font = `24px KenneyFuture`;
+    const txt = "Use mouse / finger to steer spaceship!";
+    const txt2 = "Leftclick / touch to shoot!";
+    const txt3 = "Evade enemy shots!";
+    const txt4 = "Evade asteroids!";
+    const txt5 = "Defeat all enemies to win the game!"
+
+
+    GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
+    GLOBALS.ctx.fillText(
+      txt,
+      GLOBALS.virtualScreenSize.width / 2 - GLOBALS.ctx.measureText(txt).width / 2,
+      400 
+    );
+    GLOBALS.ctx.strokeText(
+      txt,
+      GLOBALS.virtualScreenSize.width / 2 - GLOBALS.ctx.measureText(txt).width / 2,
+      400
+    );
+    GLOBALS.ctx.fillText(
+      txt2,
+      GLOBALS.virtualScreenSize.width / 2 - GLOBALS.ctx.measureText(txt2).width / 2,
+      440
+    );
+    GLOBALS.ctx.strokeText(
+      txt2,
+      GLOBALS.virtualScreenSize.width / 2 - GLOBALS.ctx.measureText(txt2).width / 2,
+      440
+    );
+
+    GLOBALS.ctx.fillText(
+      txt2,
+      GLOBALS.virtualScreenSize.width / 2 - GLOBALS.ctx.measureText(txt2).width / 2,
+      440
+    );
+    GLOBALS.ctx.strokeText(
+      txt2,
+      GLOBALS.virtualScreenSize.width / 2 - GLOBALS.ctx.measureText(txt2).width / 2,
+      440
+    );
+
+    GLOBALS.ctx.fillText(
+      txt3,
+      GLOBALS.virtualScreenSize.width / 2 - GLOBALS.ctx.measureText(txt3).width / 2,
+      480
+    );
+    GLOBALS.ctx.strokeText(
+      txt3,
+      GLOBALS.virtualScreenSize.width / 2 - GLOBALS.ctx.measureText(txt3).width / 2,
+      480
+    );
+
+    GLOBALS.ctx.fillText(
+      txt4,
+      GLOBALS.virtualScreenSize.width / 2 - GLOBALS.ctx.measureText(txt4).width / 2,
+      520
+    );
+    GLOBALS.ctx.strokeText(
+      txt4,
+      GLOBALS.virtualScreenSize.width / 2 - GLOBALS.ctx.measureText(txt4).width / 2,
+      520
+    );
+
+    GLOBALS.ctx.fillText(
+      txt5,
+      GLOBALS.virtualScreenSize.width / 2 - GLOBALS.ctx.measureText(txt5).width / 2,
+      560
+    );
+    GLOBALS.ctx.strokeText(
+      txt5,
+      GLOBALS.virtualScreenSize.width / 2 - GLOBALS.ctx.measureText(txt5).width / 2,
+      560
+    );
+    GLOBALS.ctx.restore();
+  };
+
+  const startScene = new Scene([
+    startButton,
+    helpButton,
+    titleTextActor1,
+    titleTextActor2,
+  ]);
   startScene.preUpdates = () => {
     canvasAutoAdjust();
   };
@@ -172,6 +280,7 @@ window.onload = async () => {
     engine.loadScene(GLOBALS.scenes.spaceGameScene);
   };
 
+  GLOBALS.scenes.helpScene = helpScene;
   GLOBALS.scenes.gameOverScene = new EndState("GAME OVER!", [restartButton]);
   GLOBALS.scenes.winScene = new EndState("YOU WON!", [restartButton]);
 
