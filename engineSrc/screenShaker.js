@@ -1,5 +1,8 @@
 import Vector2 from "../shellriderMath/vector2.js";
 
+/**
+ * This class uses a physics simulation of 2 springs to calculate a position which we use to calculate screen positions
+ */
 class ScreenShaker {
   velocity;
   lastPosition;

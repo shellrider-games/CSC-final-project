@@ -6,6 +6,10 @@ import Sprite from "./sprite.js";
 import Scene from "./scene.js";
 import ScreenShaker from "./screenShaker.js";
 
+
+/**
+ * Class that manages the update and render steps of the current Scene as well as which game scene is active right now
+ */
 class ShellriderEngine {
   actors;
   lastTimestamp;
