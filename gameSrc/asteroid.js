@@ -1,6 +1,9 @@
 import StaticBody from "../engineSrc/staticBody.js";
 import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 
+/**
+ * Class that represents asteroids that player has to evade
+ */
 class Asteroid extends StaticBody {
   constructor(x, y, width = 101, height = 84) {
     super(x, y, width, height);

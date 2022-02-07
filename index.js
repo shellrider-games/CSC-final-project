@@ -7,11 +7,13 @@ import EndState from "./gameSrc/endState.js";
 import TextActor from "./engineSrc/textActor.js";
 import TitleTextActor from "./gameSrc/titleTextActor.js";
 
+//Register function to the document to allow changing debug flag from console
 window.toggleDebug = function () {
   GLOBALS.debug = !GLOBALS.debug;
   return GLOBALS.debug;
 };
 
+//This function makes sure that the canvas fits into the window and stays at 16:9 ratio
 export function canvasAutoAdjust() {
   GLOBALS.canvasSize.height =
     Math.min((window.innerWidth / 9) * 16, window.innerHeight) - 1;
@@ -19,6 +21,7 @@ export function canvasAutoAdjust() {
     Math.min((window.innerHeight / 16) * 9, window.innerWidth) - 1;
 }
 
+//When window is loaded start game code
 window.onload = async () => {
   let vh = window.innerHeight * 0.01;
   document.body.style.setProperty("--vh", `${vh}px`);
@@ -31,6 +34,8 @@ window.onload = async () => {
   const canvas = document.querySelector("#gameCanvas");
   const engine = new ShellriderEngine(canvas);
   const fullSreenButton = document.querySelector("#fullscreen");
+  
+  //add font to document
   const kenneyFuture = new FontFace(
     "KenneyFuture",
     "url(./assets/fonts/KenneyFuture.ttf)"
@@ -45,7 +50,6 @@ window.onload = async () => {
       document.body.webkitRequestFullscreen();
     }
   }
-
   canvasAutoAdjust();
 
   document.body.addEventListener("fullscreenchange", (event) => {
@@ -56,7 +60,12 @@ window.onload = async () => {
     }
   });
   fullSreenButton.addEventListener("click", canvasFullscreen);
+
+
+  //initialize engine
   engine.init();
+
+  //request and load all assets
   await engine.audio.loadSound(
     "./assets/audio/effects/explosion.wav",
     "explosion"
@@ -92,6 +101,8 @@ window.onload = async () => {
     "./assets/img/laserRed10.png"
   );
 
+
+  //Setup Scene objects
   GLOBALS.scenes.spaceGameScene = new SpaceGameScene();
 
   const startButton = new ShellriderButton(
@@ -284,5 +295,7 @@ window.onload = async () => {
   GLOBALS.scenes.gameOverScene = new EndState("GAME OVER!", [restartButton]);
   GLOBALS.scenes.winScene = new EndState("YOU WON!", [restartButton]);
 
+
+  //tell engine which Scene object to load first we use the startScene
   engine.loadScene(startScene);
 };

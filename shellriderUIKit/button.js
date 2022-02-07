@@ -2,6 +2,9 @@ import Actor from "../engineSrc/actor.js";
 import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 import NineSliceImage from "../engineSrc/NineSliceImage.js";
 
+/**
+ * This class represents a button in our game using NineSliceImage as backgrounds. The state management of the button is implemented in this class and it provides empty functions.
+ */
 class ShellriderButton extends Actor {
   position;
   dimensions;
