@@ -1,10 +1,11 @@
 import Actor from "./actor.js";
 import { GLOBALS } from "./shellriderEngineGlobals.js";
 
+//Actor to write text to screen, text is centered on position
 class TextActor extends Actor {
   position;
   text;
-  size;
+  size; //fontsize
   fill;
   stroke;
   font;

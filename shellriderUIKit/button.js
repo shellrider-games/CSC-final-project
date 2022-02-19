@@ -34,6 +34,8 @@ class ShellriderButton extends Actor {
     this.state = "default";
     this.prevState = "default";
   }
+
+  //Render the correct 9SliceImage depending on button state
   render() {
     GLOBALS.ctx.save();
     GLOBALS.ctx.scale(GLOBALS.scaleFactor.x, GLOBALS.scaleFactor.y);
@@ -79,12 +81,15 @@ class ShellriderButton extends Actor {
     GLOBALS.ctx.restore();
   }
 
+  //empty function, override when you create a button to set what should happen when button is clicked/pressed
   onPressed() {}
-
+  //empty function, override when you create a button to set what should happen when button is released
   onRelease() {}
-
+  //empty function, override when you create a button to set what should happen when button is first clicked and then moved away from without releasing the click/touch
   onReject() {}
 
+
+  //update function checks mouseposition and click/touch status to figure out if the button was pressed/released/rejcected
   update(delta) {
     const bb = this.getBoundingBox();
     //check if mouse is in button bounding box

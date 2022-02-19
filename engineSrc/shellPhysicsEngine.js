@@ -1,3 +1,5 @@
+//Collection of functions for collisions this is a class for later where we want to be able to change physics engine
+
 class ShellPhysicsEngine {
   constructor() {}
 

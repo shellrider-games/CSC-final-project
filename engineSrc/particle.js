@@ -1,6 +1,11 @@
 import Actor from "./actor.js";
 import { GLOBALS } from "./shellriderEngineGlobals.js";
 
+
+/*
+* Circular particles, that travel in a certain direction at a certain speed (can also be 0) and tracks it's own age.
+* Use a ParticleManager to delete "dead" particles.
+*/
 class Particle extends Actor {
   position;
   radius;

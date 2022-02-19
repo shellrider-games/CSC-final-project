@@ -18,6 +18,8 @@ class ScreenShaker {
     this.dampening = dampening;
   }
 
+
+  //Uses Hooke's law spring simulation to calculate the next position of the 2 springs.
   update(delta) {
     const springForce = new Vector2(
       -this.stiffness * this.shakePosition.x -
@@ -34,7 +36,8 @@ class ScreenShaker {
 
     this.shakePosition.x = this.shakePosition.x + this.velocity.x * delta;
     this.shakePosition.y = this.shakePosition.y + this.velocity.y * delta;
-
+    
+    //if the foreces on the springs are very low set it to 0 and reset positions in order to not calculate uneccesarry cycles
     if (
       springForce.x <= 0.1 &&
       springForce.x >= -0.1 &&
@@ -50,6 +53,7 @@ class ScreenShaker {
     }
   }
 
+  //Set springs offesets to a certain position and resets the velocities to 0
   putAtPositon(x, y) {
     this.shakePosition.x = x;
     this.shakePosition.y = y;

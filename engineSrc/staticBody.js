@@ -2,6 +2,11 @@ import Actor from "./actor.js";
 import { GLOBALS } from "./shellriderEngineGlobals.js";
 import Sprite from "./sprite.js";
 
+
+/*
+* An Actor that has a position, dimensions and can have a sprite containing it's image data
+* provides a default bounding box for physics
+*/
 class StaticBody extends Actor {
   position;
   dimensions;

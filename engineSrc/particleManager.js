@@ -1,6 +1,10 @@
 import Actor from "./actor.js";
 import Particle from "./particle.js";
 
+/*
+* ParticleManager is responsible for adding particles to the engine and deleting them once they are beyond their time to live.
+*/
+
 class ParticleManager extends Actor {
   engine;
   particles;

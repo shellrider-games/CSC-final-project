@@ -1,3 +1,6 @@
+/*
+* Class for managing image data and loading in order to allow the engine to wait for images to be loaded before continueing prevents draw calls on broken image objects
+*/
 class Sprite {
   width;
   height;

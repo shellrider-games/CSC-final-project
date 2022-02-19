@@ -1,3 +1,4 @@
+//Very simple vector class expand with more vector functions as needed
 class Vector2 {
   x;
   y;

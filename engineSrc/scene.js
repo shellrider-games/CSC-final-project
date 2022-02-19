@@ -1,3 +1,5 @@
+//abstract class with all the functions a Scene for the ShellriderEngine needs
+
 class Scene {
   actors;
 

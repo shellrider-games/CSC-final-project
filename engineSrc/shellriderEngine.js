@@ -62,6 +62,7 @@ class ShellriderEngine {
     }
   }
 
+  //function to store current configuration of the canvas in globals, this allows resizing at runtime
   updateCanvasSize() {
     GLOBALS.canvas.setAttribute("width", GLOBALS.canvasSize.width);
     GLOBALS.canvas.setAttribute("height", GLOBALS.canvasSize.height);
@@ -119,6 +120,7 @@ class ShellriderEngine {
   }
 
   initTouch() {
+    //Setup touch use on smartphones sadly only works on android
     const updateTouchPosition = (event) => {
       const touchList = event.changedTouches;
       const canvasBounds = GLOBALS.canvas.getBoundingClientRect();
@@ -136,6 +138,7 @@ class ShellriderEngine {
     };
   }
 
+  //load some default images for buttons
   async initUIKit() {
     GLOBALS.defaultButtonImage = await this.requestSprite(
       "./engine_assets/img/grey_button10.png"
@@ -152,6 +155,7 @@ class ShellriderEngine {
     GLOBALS.engine = this;
   }
 
+  //function to change Scene of game engine
   loadScene(scene, transitionFunction = () => {}) {
     const sceneCopy = scene;
     if (scene instanceof Scene) {
@@ -164,6 +168,7 @@ class ShellriderEngine {
     }
   }
 
+  //kick off engine
   run() {
     this.lastTimestamp = performance.now();
     GLOBALS.pause = false;
@@ -172,6 +177,7 @@ class ShellriderEngine {
     });
   }
 
+  //function to ask engine to create a Sprite Object
   async requestSprite(filepath, width, height) {
     const sprite = new Sprite(filepath, width, height);
     await sprite.loadImage();

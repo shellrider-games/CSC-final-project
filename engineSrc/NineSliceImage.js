@@ -1,5 +1,9 @@
 import { GLOBALS } from "./shellriderEngineGlobals.js";
 
+/*
+* Class to store data and render a nine slice image, useful for buttons.
+* See https://en.wikipedia.org/wiki/9-slice_scaling for info on 9-slicing
+*/ 
 class NineSliceImage {
   sliceSprite;
   dimensions;
