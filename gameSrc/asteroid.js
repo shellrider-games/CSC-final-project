@@ -21,6 +21,7 @@ class Asteroid extends StaticBody {
     }
   }
 
+  //adjust bounding box to be smaller than image which makes it feel better for the player
   getBoundingBox() {
     return {
       x: this.position.x + 8,

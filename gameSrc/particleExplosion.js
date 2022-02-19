@@ -2,6 +2,8 @@ import Particle from "../engineSrc/particle.js";
 import ParticleManager from "../engineSrc/particleManager.js";
 import { randomNumberBetween } from "../engineSrc/toolBox.js";
 
+
+//Extend ParticleManager for a use as a explosion
 class ParticleExplosion extends ParticleManager {
   timeToLive;
   position;
@@ -29,7 +31,7 @@ class ParticleExplosion extends ParticleManager {
   update(delta) {
     super.update(delta);
     this.timeToLive -= delta;
-
+    //add 2 particles every update call until timeTolive is reached
     for (let i = 0; i <= 2; i++) {
       if (this.timeToLive > 0) {
         this.addParticle(
@@ -43,7 +45,7 @@ class ParticleExplosion extends ParticleManager {
         );
       }
     }
-
+    //Check if all managed particles have died, if yes removes self from game engine
     if (
       this.timeToLive <= 0 &&
       !(Array.isArray(this.particles) && this.particles.length)

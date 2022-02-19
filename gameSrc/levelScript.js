@@ -1,6 +1,8 @@
 import Actor from "../engineSrc/actor.js";
 import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 
+
+//A collection of Steps that are done in sucession when the next step condition is met.
 class LevelScript extends Actor {
   steps;
   currentIndex;

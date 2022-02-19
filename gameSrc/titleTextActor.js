@@ -1,6 +1,8 @@
 import TextActor from "../engineSrc/textActor.js";
 import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 
+
+//Animated swaying text
 class TitleTextActor extends TextActor {
   scale;
   targetSize;

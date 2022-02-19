@@ -2,6 +2,9 @@ import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 import Scene from "../engineSrc/scene.js";
 import { canvasAutoAdjust } from "../index.js";
 
+/*
+* Scene for Win or Lose screen
+*/
 class EndState extends Scene {
   text;
   currentlyTouched;

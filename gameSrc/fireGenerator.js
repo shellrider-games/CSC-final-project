@@ -3,6 +3,8 @@ import ParticleManager from "../engineSrc/particleManager.js";
 import { randomNumberBetween } from "../engineSrc/toolBox.js";
 import Vector2 from "../shellriderMath/vector2.js";
 
+
+//A flame that points in a direction defined by a vector, extends a ParticleManager for Flames
 class FireGenerator extends ParticleManager {
   nextParticle;
   position;

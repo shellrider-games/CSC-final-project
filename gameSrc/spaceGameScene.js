@@ -12,6 +12,8 @@ import EnemyStep from "./enemyStep.js";
 import PatrolingGrunt from "./patrolingGrunt.js";
 import SpreadShotEnemy from "./spreadShotEnemy.js";
 
+
+//Essentially the game manages collision detection between player and hazards.
 class SpaceGameScene extends Scene {
   playerShip;
   constructor() {
@@ -21,6 +23,8 @@ class SpaceGameScene extends Scene {
     canvasAutoAdjust();
   }
 
+
+  //checks if collisions occured and damages ship if so
   postUpdates(delta) {
     GLOBALS.gamedata.asteroids.forEach((asteroid) => {
       if (GLOBALS.engine.physics.collide(asteroid, this.playerShip)) {
@@ -67,6 +71,8 @@ class SpaceGameScene extends Scene {
     }
   }
 
+
+  //setup the game and define all the steps that follow each other
   onSceneEntry() {
     this.actors = [];
     GLOBALS.gamedata.onScreenEnemies = [];

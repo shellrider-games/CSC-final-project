@@ -1,6 +1,8 @@
 import LevelStep from "./levelStep.js";
 import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 
+
+//A level step that checks if all enemies are dead before setting all the data to switch to the next step
 class EnemyStep extends LevelStep {
   init;
   constructor(init = () => {}, func = (delta) => {}) {

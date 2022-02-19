@@ -3,6 +3,8 @@ import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 import FireGenerator from "./fireGenerator.js";
 import EnemyShot from "./enemyShot.js";
 
+
+//simplest type of enemy with, defines sprite dimensions and hitpoints for the enemy that goes to a certain target and stays there shooting
 class EnemyGrunt extends Enemy {
   speed;
   shotDelay;

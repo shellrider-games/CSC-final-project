@@ -3,6 +3,8 @@ import Actor from "../engineSrc/actor.js";
 import { randomNumberBetween } from "../engineSrc/toolBox.js";
 import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 
+
+//this actor creates asteroid obstacles in a random interval
 class AsteroidGenerator extends Actor {
   timeTracker;
   nextSpawn;

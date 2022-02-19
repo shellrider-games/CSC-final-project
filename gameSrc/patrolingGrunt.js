@@ -1,5 +1,6 @@
 import EnemyGrunt from "./enemyGrunt.js";
 
+//enemy that toggles between a list of waypoints
 class PatrolingGrunt extends EnemyGrunt {
   wayPoints;
   currentTargetPoint;

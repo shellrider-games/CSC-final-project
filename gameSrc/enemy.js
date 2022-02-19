@@ -3,6 +3,8 @@ import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 import Vector2 from "../shellriderMath/vector2.js";
 import ParticleExplosion from "./particleExplosion.js";
 
+
+//class for enemies, responsible for moving the enemy, checking if the enemy has been hit by a player laser, loosing hitpoints and dying
 class Enemy extends StaticBody {
   hitpoints;
   target;
@@ -14,6 +16,7 @@ class Enemy extends StaticBody {
   }
 
   update(delta) {
+    //movement part
     if (
       !(this.position.x === this.target.x && this.position.y === this.target.y)
     ) {
@@ -37,7 +40,7 @@ class Enemy extends StaticBody {
         this.position.y = this.target.y;
       }
     }
-
+    //check for collisons with player shots
     GLOBALS.gamedata.playerShots.forEach((playerShot) => {
       if (GLOBALS.engine.physics.collide(this, playerShot)) {
         this.hitpoints -= 1;
@@ -52,6 +55,7 @@ class Enemy extends StaticBody {
         GLOBALS.engine.removeActor(playerShot);
       }
     });
+    //check if enemy is dead and explode if it is
     if (this.hitpoints <= 0) {
       let shakeVector = new Vector2(10, 10);
       shakeVector = shakeVector.rotate(Math.random() * Math.PI * 2);

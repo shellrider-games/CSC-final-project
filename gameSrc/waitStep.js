@@ -1,6 +1,7 @@
 import LevelStep from "./levelStep.js";
 import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 
+//Step that just waits a predefined amount of time before moving to the next one
 class WaitStep extends LevelStep {
   timePassed;
   constructor(time) {

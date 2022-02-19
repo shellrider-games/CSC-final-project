@@ -2,6 +2,8 @@ import LevelStep from "./levelStep.js";
 import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 import AsteroidGenerator from "./asteroidGenerator.js";
 
+
+//Step of the level that takes a 8 seconds and creates asteroids for 5 seconds
 class AsteroidStep extends LevelStep {
   constructor() {
     super((delta) => {

@@ -2,6 +2,8 @@ import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 import Vector2 from "../shellriderMath/vector2.js";
 import EnemyShot from "./enemyShot.js";
 
+
+//more complex shot that is used by Spread shot enemyies, shot can travel in any direction defined by the rotation variable uses different sprite and dimensions than enemy shot
 class EnemySpreadShot extends EnemyShot {
   rotation;
   constructor(x, y, rotation = 0, width = 37, height = 36) {

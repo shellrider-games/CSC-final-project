@@ -3,6 +3,8 @@ import { GLOBALS } from "../engineSrc/shellriderEngineGlobals.js";
 import FireGenerator from "./fireGenerator.js";
 import PlayerShot from "./playerShot.js";
 
+
+//Player class
 class PlayerShip extends StaticBody {
   speed;
   shotDelay;
@@ -39,6 +41,7 @@ class PlayerShip extends StaticBody {
     );
   }
 
+  //change bounding box to be easier for the player and only cotain the main part of the ship image
   getBoundingBox() {
     let bb = {
       x: this.position.x,
@@ -54,6 +57,7 @@ class PlayerShip extends StaticBody {
     this.shotDelay = Math.max(this.shotDelay - delta, 0);
     this.nextShield = Math.max(this.nextShield - delta, 0);
 
+    //move according to touch/mouseposition
     if (GLOBALS.touch.active) {
       goalX = Math.min(
         Math.max(GLOBALS.touch.x - this.dimensions.width / 2, 0),
@@ -70,7 +74,7 @@ class PlayerShip extends StaticBody {
       Math.max(GLOBALS.mouse.x - this.dimensions.width / 2, 0),
       GLOBALS.virtualScreenSize.width - this.dimensions.width
     );
-
+    // this ternary operator prevents the ship from overshooting it's target
     goalX > this.position.x
       ? (this.position.x = Math.min(
           this.position.x + this.speed * delta,
@@ -81,6 +85,7 @@ class PlayerShip extends StaticBody {
           goalX
         ));
 
+    //check if mouse is down or display is touched and ship can shoot, shoot if conditions are met
     if ((GLOBALS.touch.active || GLOBALS.mouse.down) && this.shotDelay === 0) {
       const newShot = new PlayerShot(
         this.position.x +
@@ -93,9 +98,12 @@ class PlayerShip extends StaticBody {
       GLOBALS.gamedata.playerShots.push(newShot);
       GLOBALS.engine.addActor(newShot);
     }
+    //respawn shield after nextShield timer hit 0
     if (!this.shield && this.nextShield <= 0) {
       this.shield = true;
     }
+
+    //adjust flame emitters
     this.fireEngine1.position.x =
       this.position.x + this.dimensions.width / 2 - 25;
     this.fireEngine1.position.y = this.position.y + this.dimensions.height - 5;
@@ -107,6 +115,8 @@ class PlayerShip extends StaticBody {
     this.fireEngine1.update(delta);
     this.fireEngine2.update(delta);
   }
+
+  //Renders the ship + the shield sprite if shield is active
   render() {
     super.render();
     GLOBALS.ctx.save();

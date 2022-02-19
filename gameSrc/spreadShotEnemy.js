@@ -3,6 +3,8 @@ import Enemy from "./enemy.js";
 import FireGenerator from "./fireGenerator.js";
 import EnemySpreadShot from "./enemySpreadShot.js";
 
+
+//Tougher Enemy that shoots in a spread pattern
 class SpreadShotEnemy extends Enemy {
   shotDelay;
   fireEngine;
